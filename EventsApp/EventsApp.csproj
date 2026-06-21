@@ -55,6 +55,11 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Model\AttendanceRange.cs" />
+    <Compile Include="Model\Event.cs" />
+    <Compile Include="Model\EventType.cs" />
+    <Compile Include="Model\Tag.cs" />
+    <Compile Include="VML\ViewModelLocator.cs" />
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -86,6 +91,9 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
+    <None Include="Data\events.json" />
+    <None Include="Data\eventTypes.json" />
+    <None Include="Data\tags.json" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
@@ -93,6 +101,26 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="ViewModel\" />
+    <Folder Include="View\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Images\world-map.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Images\film.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Images\music.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Images\tennis.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Images\art.png" />
+    <Resource Include="Resources\Images\basketball.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

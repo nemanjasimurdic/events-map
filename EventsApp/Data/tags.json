@@ -1,0 +1,27 @@
+[
+  {
+    "Id": 1,
+    "Description": "Outdoor",
+    "ColorHex": "#4CAF50"
+  },
+  {
+    "Id": 2,
+    "Description": "Free Entry",
+    "ColorHex": "#2196F3"
+  },
+  {
+    "Id": 3,
+    "Description": "Family Friendly",
+    "ColorHex": "#FF9800"
+  },
+  {
+    "Id": 4,
+    "Description": "Sold Out Frequently",
+    "ColorHex": "#F44336"
+  },
+  {
+    "Id": 5,
+    "Description": "International",
+    "ColorHex": "#9C27B0"
+  }
+]

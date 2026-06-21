@@ -1,0 +1,138 @@
+[
+  {
+    "Id": 1,
+    "Name": "EXIT Music Festival",
+    "Description": "One of Europe's leading music festivals held in the Petrovaradin Fortress in Novi Sad, Serbia.",
+    "EventTypeId": 1,
+    "Attendance": 3,
+    "IconPath": null,
+    "IsHumanitarian": false,
+    "AverageCost": 80.0,
+    "Country": "Serbia",
+    "City": "Novi Sad",
+    "HistoryDates": [
+      "2021-07-08T00:00:00",
+      "2022-07-07T00:00:00",
+      "2023-07-06T00:00:00",
+      "2024-07-11T00:00:00",
+      "2025-07-10T00:00:00"
+    ],
+    "CurrentYearDate": "2026-07-09T00:00:00",
+    "TagIds": ["1", "5"],
+    "MapX": null,
+    "MapY": null
+  },
+  {
+    "Id": 2,
+    "Name": "Cannes Film Festival",
+    "Description": "Prestigious international film festival held annually in Cannes, France, awarding the Palme d'Or.",
+    "EventTypeId": 2,
+    "Attendance": 3,
+    "IconPath": null,
+    "IsHumanitarian": false,
+    "AverageCost": 150.0,
+    "Country": "France",
+    "City": "Cannes",
+    "HistoryDates": [
+      "2021-07-06T00:00:00",
+      "2022-05-17T00:00:00",
+      "2023-05-16T00:00:00",
+      "2024-05-14T00:00:00",
+      "2025-05-13T00:00:00"
+    ],
+    "CurrentYearDate": "2026-05-12T00:00:00",
+    "TagIds": ["4", "5"],
+    "MapX": null,
+    "MapY": null
+  },
+  {
+    "Id": 3,
+    "Name": "Australian Open",
+    "Description": "The Australian Open Grand Slam tennis tournament played on hard courts at Melbourne Park in Melbourne.",
+    "EventTypeId": 4,
+    "Attendance": 3,
+    "IconPath": "Resources/Icons/tennis.png",
+    "IsHumanitarian": false,
+    "AverageCost": 95.0,
+    "Country": "Australia",
+    "City": "Melbourne",
+    "HistoryDates": [
+      "2021-02-08T00:00:00",
+      "2022-01-17T00:00:00",
+      "2023-01-16T00:00:00",
+      "2024-01-14T00:00:00",
+      "2025-01-12T00:00:00"
+    ],
+    "CurrentYearDate": "2026-01-18T00:00:00",
+    "TagIds": [ "4", "5" ],
+    "MapX": null,
+    "MapY": null
+  },
+  {
+    "Id": 4,
+    "Name": "Venice Art Biennale",
+    "Description": "One of the most prestigious contemporary art exhibitions in the world, held every two years in Venice.",
+    "EventTypeId": 5,
+    "Attendance": 2,
+    "IconPath": null,
+    "IsHumanitarian": false,
+    "AverageCost": 30.0,
+    "Country": "Italy",
+    "City": "Venice",
+    "HistoryDates": [
+      "2019-05-11T00:00:00",
+      "2022-04-23T00:00:00",
+      "2024-04-20T00:00:00"
+    ],
+    "CurrentYearDate": null,
+    "TagIds": ["3", "5"],
+    "MapX": null,
+    "MapY": null
+  },
+  {
+    "Id": 5,
+    "Name": "NBA Finals",
+    "Description": "The championship series of the National Basketball Association, the conclusion of the NBA playoffs.",
+    "EventTypeId": 3,
+    "Attendance": 3,
+    "IconPath": "Resources/Icons/basketball.png",
+    "IsHumanitarian": false,
+    "AverageCost": 250.0,
+    "Country": "United States",
+    "City": "Varies",
+    "HistoryDates": [
+      "2021-07-06T00:00:00",
+      "2022-06-02T00:00:00",
+      "2023-06-01T00:00:00",
+      "2024-06-06T00:00:00",
+      "2025-06-05T00:00:00"
+    ],
+    "CurrentYearDate": "2026-06-04T00:00:00",
+    "TagIds": ["4", "5"],
+    "MapX": null,
+    "MapY": null
+  },
+  {
+    "Id": 6,
+    "Name": "Louvre Free Entry Day",
+    "Description": "Annual free admission event at the Louvre Museum in Paris, open to all visitors on Bastille Day.",
+    "EventTypeId": 5,
+    "Attendance": 1,
+    "IconPath": "Resources/Icons/art.png",
+    "IsHumanitarian": true,
+    "AverageCost": 0.0,
+    "Country": "France",
+    "City": "Paris",
+    "HistoryDates": [
+      "2021-07-14T00:00:00",
+      "2022-07-14T00:00:00",
+      "2023-07-14T00:00:00",
+      "2024-07-14T00:00:00",
+      "2025-07-14T00:00:00"
+    ],
+    "CurrentYearDate": "2026-07-14T00:00:00",
+    "TagIds": ["2", "3"],
+    "MapX": null,
+    "MapY": null
+  }
+]
