@@ -20,55 +20,101 @@
 
         <!-- ── HEADER ── -->
         <Grid Grid.Row="0">
-            <Button x:Name="HamburgerButton" Click="HamburgerButton_Click"
-                    Background="Transparent" BorderThickness="0"
-                    HorizontalAlignment="Left" VerticalAlignment="Center"
-                    Margin="15,0,0,0" Width="36" Height="36" Padding="6">
-                <Image Source="/Resources/Images/hamburger-menu.png" Stretch="Uniform"/>
-            </Button>
+            <!-- Left cluster: hamburger + page title (shown only when on a page) -->
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Left"
+                        VerticalAlignment="Center" Margin="15,0,0,0">
+                <Button x:Name="HamburgerButton" Click="HamburgerButton_Click"
+                        Background="Transparent" BorderThickness="0"
+                        Width="36" Height="36" Padding="6">
+                    <Image Source="/Resources/Images/hamburger-menu.png" Stretch="Uniform"/>
+                </Button>
+                <TextBlock x:Name="PageTitleText"
+                           FontSize="16" FontWeight="SemiBold"
+                           VerticalAlignment="Center" Margin="8,0,0,0"
+                           Visibility="Collapsed"/>
+            </StackPanel>
 
-            <TextBlock Text="Event map" FontSize="22" FontWeight="Bold"
-                       HorizontalAlignment="Center" VerticalAlignment="Center"/>
+            <!-- Clicking the centered app title always returns to the map workspace -->
+            <Button HorizontalAlignment="Center" VerticalAlignment="Center"
+                    Background="Transparent" BorderThickness="0" Padding="0"
+                    Click="EventMapTitle_Click">
+                <TextBlock Text="Event map" FontSize="22" FontWeight="Bold"/>
+            </Button>
         </Grid>
 
-        <!-- Popup lives at root Grid level so the 60px header row cannot clip it -->
+        <!-- Hamburger popup at root level so it isn't clipped by the 60px header row -->
         <Popup x:Name="HamburgerPopup" Grid.Row="0"
                PlacementTarget="{Binding ElementName=HamburgerButton}"
                Placement="Bottom" StaysOpen="False">
             <Border Background="White" BorderBrush="Black" BorderThickness="1" MinWidth="210">
                 <StackPanel>
                     <Button Click="MenuEvents_Click" Background="Transparent" BorderThickness="0"
-                            HorizontalContentAlignment="Left" Padding="14,10">
+                            HorizontalContentAlignment="Left" Padding="16,16">
                         <StackPanel Orientation="Horizontal">
-                            <Image Source="/Resources/Images/event.png" Width="18" Height="18" VerticalAlignment="Center"/>
+                            <Image Source="/Resources/Images/event.png" Width="22" Height="22" VerticalAlignment="Center"/>
                             <TextBlock Text="Events" Margin="10,0,0,0" VerticalAlignment="Center"
                                        FontSize="14" FontWeight="SemiBold"/>
                         </StackPanel>
                     </Button>
                     <Button Click="MenuEventTypes_Click" Background="Transparent" BorderThickness="0"
-                            HorizontalContentAlignment="Left" Padding="14,10">
+                            HorizontalContentAlignment="Left" Padding="16,16">
                         <StackPanel Orientation="Horizontal">
-                            <Image Source="/Resources/Images/event-type.png" Width="18" Height="18" VerticalAlignment="Center"/>
+                            <Image Source="/Resources/Images/event-type.png" Width="22" Height="22" VerticalAlignment="Center"/>
                             <TextBlock Text="Event types" Margin="10,0,0,0" VerticalAlignment="Center"
                                        FontSize="14" FontWeight="SemiBold"/>
                         </StackPanel>
                     </Button>
                     <Button Click="MenuTags_Click" Background="Transparent" BorderThickness="0"
-                            HorizontalContentAlignment="Left" Padding="14,10">
+                            HorizontalContentAlignment="Left" Padding="16,16">
                         <StackPanel Orientation="Horizontal">
-                            <Image Source="/Resources/Images/tag.png" Width="18" Height="18" VerticalAlignment="Center"/>
+                            <Image Source="/Resources/Images/tag.png" Width="22" Height="22" VerticalAlignment="Center"/>
                             <TextBlock Text="Tags" Margin="10,0,0,0" VerticalAlignment="Center"
                                        FontSize="14" FontWeight="SemiBold"/>
                         </StackPanel>
                     </Button>
                     <Button Click="MenuStatistics_Click" Background="Transparent" BorderThickness="0"
-                            HorizontalContentAlignment="Left" Padding="14,10">
+                            HorizontalContentAlignment="Left" Padding="16,16">
                         <StackPanel Orientation="Horizontal">
-                            <Image Source="/Resources/Images/statistic.png" Width="18" Height="18" VerticalAlignment="Center"/>
+                            <Image Source="/Resources/Images/statistic.png" Width="22" Height="22" VerticalAlignment="Center"/>
                             <TextBlock Text="Statistics" Margin="10,0,0,0" VerticalAlignment="Center"
                                        FontSize="14" FontWeight="SemiBold"/>
                         </StackPanel>
                     </Button>
+                </StackPanel>
+            </Border>
+        </Popup>
+
+        <!-- Marker info popup — PlacementTarget set in code when opening -->
+        <Popup x:Name="MarkerInfoPopup" Grid.Row="2"
+               Placement="Top" StaysOpen="False" AllowsTransparency="True">
+            <Border Background="White" BorderBrush="#CCCCCC" BorderThickness="1"
+                    CornerRadius="6" Padding="12" MinWidth="210">
+                <Border.Effect>
+                    <DropShadowEffect BlurRadius="8" ShadowDepth="2" Opacity="0.2" Direction="270"/>
+                </Border.Effect>
+                <StackPanel>
+                    <Grid>
+                        <TextBlock x:Name="PopupNameText" FontSize="13" FontWeight="Bold"
+                                   TextWrapping="Wrap" MaxWidth="170" Margin="0,0,26,0"
+                                   VerticalAlignment="Top"/>
+                        <Button Click="PopupClose_Click"
+                                HorizontalAlignment="Right" VerticalAlignment="Top"
+                                Background="Transparent" BorderThickness="0" Padding="2">
+                            <Image Source="/Resources/Images/close.png" Width="14" Height="14"/>
+                        </Button>
+                    </Grid>
+                    <StackPanel Orientation="Horizontal" Margin="0,8,0,0">
+                        <Image Source="/Resources/Images/location.png" Width="13" Height="13"
+                               VerticalAlignment="Center"/>
+                        <TextBlock x:Name="PopupLocationText" FontSize="11" Margin="4,0,0,0"
+                                   VerticalAlignment="Center"/>
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal" Margin="0,4,0,0">
+                        <Image Source="/Resources/Images/date.png" Width="13" Height="13"
+                               VerticalAlignment="Center"/>
+                        <TextBlock x:Name="PopupDateText" FontSize="11" Margin="4,0,0,0"
+                                   VerticalAlignment="Center"/>
+                    </StackPanel>
                 </StackPanel>
             </Border>
         </Popup>
@@ -210,6 +256,16 @@
             <!-- Navigation frame: hidden by default, shown when a menu page is active -->
             <Frame x:Name="MainFrame" NavigationUIVisibility="Hidden"
                    Visibility="Collapsed" Background="White"/>
+
+            <!-- Back button: floats at top-left of content area, shown only when on a page -->
+            <Button x:Name="PageBackButton"
+                    Background="Transparent" BorderThickness="0"
+                    Width="36" Height="36" Padding="6"
+                    HorizontalAlignment="Left" VerticalAlignment="Top"
+                    Margin="15,12,0,0" Panel.ZIndex="10"
+                    Visibility="Collapsed">
+                <Image Source="/Resources/Images/back.png" Stretch="Uniform"/>
+            </Button>
         </Grid>
     </Grid>
 </Window>

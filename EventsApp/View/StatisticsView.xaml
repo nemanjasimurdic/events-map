@@ -1,0 +1,150 @@
+<Page x:Class="EventsApp.Pages.StatisticsPage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:converters="clr-namespace:EventsApp.Converters"
+      Title="Statistics">
+
+    <Page.Resources>
+        <converters:PercentageToPieSliceConverter x:Key="PieConverter"/>
+
+        <!-- Diagonal-hatch fill for standard (non-humanitarian) pie segment -->
+        <DrawingBrush x:Key="HatchBrush" Viewport="0,0,8,8"
+                      ViewportUnits="Absolute" TileMode="Tile">
+            <DrawingBrush.Drawing>
+                <DrawingGroup>
+                    <GeometryDrawing Brush="#D0D0D0">
+                        <GeometryDrawing.Geometry>
+                            <RectangleGeometry Rect="0,0,8,8"/>
+                        </GeometryDrawing.Geometry>
+                    </GeometryDrawing>
+                    <GeometryDrawing>
+                        <GeometryDrawing.Pen>
+                            <Pen Brush="#888888" Thickness="1.5"/>
+                        </GeometryDrawing.Pen>
+                        <GeometryDrawing.Geometry>
+                            <GeometryGroup>
+                                <LineGeometry StartPoint="0,0"  EndPoint="8,8"/>
+                                <LineGeometry StartPoint="-4,4" EndPoint="4,12"/>
+                                <LineGeometry StartPoint="4,-4" EndPoint="12,4"/>
+                            </GeometryGroup>
+                        </GeometryDrawing.Geometry>
+                    </GeometryDrawing>
+                </DrawingGroup>
+            </DrawingBrush.Drawing>
+        </DrawingBrush>
+    </Page.Resources>
+
+    <Grid Background="White">
+
+        <!-- Three charts, centred in the page -->
+        <Grid HorizontalAlignment="Center" VerticalAlignment="Center">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="24"/>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="24"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+
+            <!-- ── Chart 1: Events per Type (horizontal bar) ── -->
+            <Border Grid.Column="0" Width="320" BorderBrush="#CCCCCC" BorderThickness="1"
+                    CornerRadius="6" Padding="16">
+                <StackPanel>
+                    <TextBlock Text="Events per Type" FontSize="13" FontWeight="SemiBold"
+                               Margin="0,0,0,14"/>
+                    <ItemsControl ItemsSource="{Binding EventsPerType}">
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <Grid Margin="0,5">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="120"/>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="28"/>
+                                    </Grid.ColumnDefinitions>
+                                    <TextBlock Grid.Column="0" Text="{Binding Label}"
+                                               FontSize="11" VerticalAlignment="Center"
+                                               TextTrimming="CharacterEllipsis"/>
+                                    <Rectangle Grid.Column="1" Width="{Binding BarWidth}"
+                                               Height="18" Fill="#444444"
+                                               HorizontalAlignment="Left"/>
+                                    <TextBlock Grid.Column="2" Text="{Binding Count}"
+                                               FontSize="11" VerticalAlignment="Center"
+                                               Margin="6,0,0,0"/>
+                                </Grid>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                </StackPanel>
+            </Border>
+
+            <!-- ── Chart 2: Event Purpose (pie) ── -->
+            <Border Grid.Column="2" Width="230" BorderBrush="#CCCCCC" BorderThickness="1"
+                    CornerRadius="6" Padding="16">
+                <StackPanel HorizontalAlignment="Center">
+                    <TextBlock Text="Event Purpose" FontSize="13" FontWeight="SemiBold"
+                               HorizontalAlignment="Center" Margin="0,0,0,14"/>
+
+                    <!-- Canvas 160×160, centre (80,80), radius 70 -->
+                    <Canvas Width="160" Height="160" HorizontalAlignment="Center">
+                        <!-- Hatched background = standard events -->
+                        <Ellipse Canvas.Left="10" Canvas.Top="10"
+                                 Width="140" Height="140"
+                                 Fill="{StaticResource HatchBrush}"/>
+                        <!-- Solid dark slice = humanitarian events -->
+                        <Path Fill="#333333" Stroke="White" StrokeThickness="1.5"
+                              Data="{Binding HumanitarianPercent,
+                                             Converter={StaticResource PieConverter}}"/>
+                    </Canvas>
+
+                    <!-- Legend: shape pattern matches the segment fill -->
+                    <StackPanel Margin="0,12,0,0">
+                        <StackPanel Orientation="Horizontal" Margin="0,3">
+                            <Rectangle Width="12" Height="12" Fill="#333333"
+                                       VerticalAlignment="Center"/>
+                            <TextBlock Text="{Binding HumanitarianLabel}"
+                                       FontSize="11" Margin="6,0,0,0" VerticalAlignment="Center"/>
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal" Margin="0,3">
+                            <Rectangle Width="12" Height="12"
+                                       Fill="{StaticResource HatchBrush}"
+                                       VerticalAlignment="Center"/>
+                            <TextBlock Text="{Binding NonHumanitarianLabel}"
+                                       FontSize="11" Margin="6,0,0,0" VerticalAlignment="Center"/>
+                        </StackPanel>
+                    </StackPanel>
+                </StackPanel>
+            </Border>
+
+            <!-- ── Chart 3: Events by Attendance (horizontal bar) ── -->
+            <Border Grid.Column="4" Width="320" BorderBrush="#CCCCCC" BorderThickness="1"
+                    CornerRadius="6" Padding="16">
+                <StackPanel>
+                    <TextBlock Text="Events by Attendance" FontSize="13" FontWeight="SemiBold"
+                               Margin="0,0,0,14"/>
+                    <ItemsControl ItemsSource="{Binding EventsByAttendance}">
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <Grid Margin="0,5">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="120"/>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="28"/>
+                                    </Grid.ColumnDefinitions>
+                                    <TextBlock Grid.Column="0" Text="{Binding Label}"
+                                               FontSize="11" VerticalAlignment="Center"
+                                               TextTrimming="CharacterEllipsis"/>
+                                    <Rectangle Grid.Column="1" Width="{Binding BarWidth}"
+                                               Height="18" Fill="#444444"
+                                               HorizontalAlignment="Left"/>
+                                    <TextBlock Grid.Column="2" Text="{Binding Count}"
+                                               FontSize="11" VerticalAlignment="Center"
+                                               Margin="6,0,0,0"/>
+                                </Grid>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                </StackPanel>
+            </Border>
+        </Grid>
+    </Grid>
+</Page>

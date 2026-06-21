@@ -69,15 +69,18 @@ namespace EventsApp.ViewModel
         {
             try
             {
+                const string pack = "pack://application:,,,/EventsApp;component/";
+
                 var typeIcons = new Dictionary<int, string>();
                 foreach (var t in _eventService.LoadEventTypes())
-                    typeIcons[t.Id] = "/" + t.IconPath;
+                    if (t.IconPath != null)
+                        typeIcons[t.Id] = pack + t.IconPath;
 
                 foreach (var ev in _eventService.LoadEvents())
                 {
                     string iconPath = null;
                     if (ev.IconPath != null)
-                        iconPath = "/" + ev.IconPath.TrimStart('/')
+                        iconPath = pack + ev.IconPath.TrimStart('/')
                             .Replace("Resources/Icons/", "Resources/Images/");
                     else if (typeIcons.ContainsKey(ev.EventTypeId))
                         iconPath = typeIcons[ev.EventTypeId];
@@ -91,7 +94,7 @@ namespace EventsApp.ViewModel
                         Name     = ev.Name,
                         Location = $"{ev.City}, {ev.Country}",
                         DateText = dateText,
-                        IconPath = iconPath ?? "/Resources/Images/world-map.png"
+                        IconPath = iconPath ?? pack + "Resources/Images/world-map.png"
                     });
                 }
             }

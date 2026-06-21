@@ -60,41 +60,43 @@
     <Compile Include="Model\Event.cs" />
     <Compile Include="Model\EventType.cs" />
     <Compile Include="Model\Tag.cs" />
-    <Page Include="View\EventsPage.xaml">
+    <Page Include="View\EventsView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Compile Include="View\EventsPage.xaml.cs">
-      <DependentUpon>EventsPage.xaml</DependentUpon>
+    <Compile Include="View\EventsView.xaml.cs">
+      <DependentUpon>EventsView.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Page Include="View\EventTypesPage.xaml">
+    <Page Include="View\EventTypesView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Compile Include="View\EventTypesPage.xaml.cs">
-      <DependentUpon>EventTypesPage.xaml</DependentUpon>
+    <Compile Include="View\EventTypesView.xaml.cs">
+      <DependentUpon>EventTypesView.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Page Include="View\TagsPage.xaml">
+    <Page Include="View\TagsView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Compile Include="View\TagsPage.xaml.cs">
-      <DependentUpon>TagsPage.xaml</DependentUpon>
+    <Compile Include="View\TagsView.xaml.cs">
+      <DependentUpon>TagsView.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Page Include="View\StatisticsPage.xaml">
+    <Page Include="View\StatisticsView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Compile Include="View\StatisticsPage.xaml.cs">
-      <DependentUpon>StatisticsPage.xaml</DependentUpon>
+    <Compile Include="View\StatisticsView.xaml.cs">
+      <DependentUpon>StatisticsView.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Converters\PercentageToPieSliceConverter.cs" />
     <Compile Include="Services\EventService.cs" />
     <Compile Include="VML\ViewModelLocator.cs" />
     <Compile Include="ViewModel\MainWindowViewModel.cs" />
+    <Compile Include="ViewModel\StatisticsViewModel.cs" />
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -122,6 +124,7 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
+    <Resource Include="Resources\Images\close.png" />
     <Resource Include="Resources\Images\event-type.png" />
     <Resource Include="Resources\Images\event.png" />
     <Resource Include="Resources\Images\statistic.png" />
@@ -162,6 +165,7 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Resources\Images\art.png" />
+    <Resource Include="Resources\Images\back.png" />
     <Resource Include="Resources\Images\basketball.png" />
     <Resource Include="Resources\Images\date.png" />
     <Resource Include="Resources\Images\hamburger-menu.png" />

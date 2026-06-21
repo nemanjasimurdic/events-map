@@ -46,35 +46,51 @@ namespace EventsApp
 
         // ── Navigation ────────────────────────────────────────────────────
 
-        private void NavigateTo(Page page)
+        private void NavigateTo(Page page, string pageTitle)
         {
+            PageTitleText.Text = pageTitle;
+            PageTitleText.Visibility = Visibility.Visible;
+            PageBackButton.Visibility = Visibility.Visible;
             MapWorkspace.Visibility = Visibility.Collapsed;
             MainFrame.Visibility = Visibility.Visible;
             MainFrame.Navigate(page);
         }
 
+        public void ShowMapWorkspace()
+        {
+            PageTitleText.Visibility = Visibility.Collapsed;
+            PageBackButton.Visibility = Visibility.Collapsed;
+            MainFrame.Visibility = Visibility.Collapsed;
+            MapWorkspace.Visibility = Visibility.Visible;
+        }
+
+        private void EventMapTitle_Click(object sender, RoutedEventArgs e)
+        {
+            ShowMapWorkspace();
+        }
+
         private void MenuEvents_Click(object sender, RoutedEventArgs e)
         {
             HamburgerPopup.IsOpen = false;
-            NavigateTo(new EventsPage());
+            NavigateTo(new EventsPage(), "Events");
         }
 
         private void MenuEventTypes_Click(object sender, RoutedEventArgs e)
         {
             HamburgerPopup.IsOpen = false;
-            NavigateTo(new EventTypesPage());
+            NavigateTo(new EventTypesPage(), "Event types");
         }
 
         private void MenuTags_Click(object sender, RoutedEventArgs e)
         {
             HamburgerPopup.IsOpen = false;
-            NavigateTo(new TagsPage());
+            NavigateTo(new TagsPage(), "Tags");
         }
 
         private void MenuStatistics_Click(object sender, RoutedEventArgs e)
         {
             HamburgerPopup.IsOpen = false;
-            NavigateTo(new StatisticsPage());
+            NavigateTo(new StatisticsPage(), "Statistics");
         }
 
         // ── Drag initiation from list ──────────────────────────────────────
@@ -193,6 +209,18 @@ namespace EventsApp
             }
         }
 
+        private void Marker_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
+        {
+            // If _markerBeingDragged is still set, no drag was initiated — treat as a click
+            if (_markerBeingDragged == null) return;
+            var marker = _markerBeingDragged;
+            var item   = _markerDragItem;
+            _markerBeingDragged = null;
+            _markerDragItem     = null;
+            ShowMarkerInfoPopup(marker, item);
+            e.Handled = true;
+        }
+
         // ── Helpers ───────────────────────────────────────────────────────
 
         private EventCardItem GetCardUnderMouse(DependencyObject source)
@@ -234,11 +262,7 @@ namespace EventsApp
                 HorizontalAlignment = HorizontalAlignment.Center
             };
             if (item.IconPath != null)
-            {
-                var uri = new Uri("pack://application:,,,/" +
-                    item.IconPath.TrimStart('/'), UriKind.Absolute);
-                img.Source = new BitmapImage(uri);
-            }
+                img.Source = new BitmapImage(new Uri(item.IconPath, UriKind.Absolute));
             panel.Children.Add(img);
 
             panel.Children.Add(new TextBlock
@@ -255,9 +279,24 @@ namespace EventsApp
 
             panel.MouseLeftButtonDown += Marker_MouseLeftButtonDown;
             panel.MouseMove           += Marker_MouseMove;
+            panel.MouseLeftButtonUp   += Marker_MouseLeftButtonUp;
 
             MapCanvas.Children.Add(panel);
             _mapMarkers[panel] = item;
+        }
+
+        private void ShowMarkerInfoPopup(FrameworkElement marker, EventCardItem item)
+        {
+            PopupNameText.Text     = item.Name;
+            PopupLocationText.Text = item.Location;
+            PopupDateText.Text     = item.DateText;
+            MarkerInfoPopup.PlacementTarget = marker;
+            MarkerInfoPopup.IsOpen = true;
+        }
+
+        private void PopupClose_Click(object sender, RoutedEventArgs e)
+        {
+            MarkerInfoPopup.IsOpen = false;
         }
 
         private void ResetButton_Click(object sender, RoutedEventArgs e)
