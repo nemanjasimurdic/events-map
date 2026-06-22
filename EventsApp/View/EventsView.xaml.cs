@@ -1,4 +1,5 @@
 using System.Windows.Controls;
+using EventsApp.ViewModel;
 
 namespace EventsApp.Pages
 {
@@ -7,6 +8,7 @@ namespace EventsApp.Pages
         public EventsPage()
         {
             InitializeComponent();
+            DataContext = new EventsViewModel();
         }
     }
 }

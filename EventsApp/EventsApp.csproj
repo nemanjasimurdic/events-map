@@ -95,6 +95,9 @@
     <Compile Include="Converters\PercentageToPieSliceConverter.cs" />
     <Compile Include="Services\EventService.cs" />
     <Compile Include="VML\ViewModelLocator.cs" />
+    <Compile Include="ViewModel\EventsViewModel.cs" />
+    <Compile Include="ViewModel\EventTypesViewModel.cs" />
+    <Compile Include="ViewModel\TagsViewModel.cs" />
     <Compile Include="ViewModel\MainWindowViewModel.cs" />
     <Compile Include="ViewModel\StatisticsViewModel.cs" />
     <Page Include="MainWindow.xaml">
@@ -126,6 +129,10 @@
     </Compile>
     <Resource Include="Resources\Images\add.png" />
     <Resource Include="Resources\Images\close.png" />
+    <Resource Include="Resources\Images\delete.png" />
+    <Resource Include="Resources\Images\edit.png" />
+    <Resource Include="Resources\Images\info.png" />
+    <Resource Include="Resources\Images\search.png" />
     <Resource Include="Resources\Images\event-type.png" />
     <Resource Include="Resources\Images\event.png" />
     <Resource Include="Resources\Images\statistic.png" />

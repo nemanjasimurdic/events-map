@@ -11,6 +11,7 @@ namespace EventsApp.Services
         private static readonly string BaseDir    = AppDomain.CurrentDomain.BaseDirectory;
         private static readonly string EventsPath = Path.Combine(BaseDir, "Data", "events.json");
         private static readonly string TypesPath  = Path.Combine(BaseDir, "Data", "eventTypes.json");
+        private static readonly string TagsPath   = Path.Combine(BaseDir, "Data", "tags.json");
 
         public List<Event> LoadEvents()
         {
@@ -67,6 +68,14 @@ namespace EventsApp.Services
 
             var serializer = new JavaScriptSerializer();
             return serializer.Deserialize<List<EventType>>(File.ReadAllText(TypesPath));
+        }
+
+        public List<Tag> LoadTags()
+        {
+            if (!File.Exists(TagsPath)) return new List<Tag>();
+
+            var serializer = new JavaScriptSerializer();
+            return serializer.Deserialize<List<Tag>>(File.ReadAllText(TagsPath));
         }
     }
 }
