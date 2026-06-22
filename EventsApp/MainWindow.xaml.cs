@@ -30,6 +30,14 @@ namespace EventsApp
         {
             InitializeComponent();
             _vm = (MainWindowViewModel)DataContext;
+            Loaded += MainWindow_Loaded;
+        }
+
+        private void MainWindow_Loaded(object sender, RoutedEventArgs e)
+        {
+            foreach (var item in _vm.MapMarkerItems)
+                if (item.MapX.HasValue && item.MapY.HasValue)
+                    PlaceMarker(item, new Point(item.MapX.Value, item.MapY.Value));
         }
 
         // ── Hamburger menu ─────────────────────────────────────────────────
@@ -159,7 +167,7 @@ namespace EventsApp
 
         private void MapCanvas_DragOver(object sender, DragEventArgs e)
         {
-            e.Effects = e.Data.GetDataPresent("ListCard")
+            e.Effects = (e.Data.GetDataPresent("ListCard") || e.Data.GetDataPresent("MapMarker"))
                 ? DragDropEffects.Move
                 : DragDropEffects.None;
             e.Handled = true;
@@ -167,16 +175,26 @@ namespace EventsApp
 
         private void MapCanvas_Drop(object sender, DragEventArgs e)
         {
-            if (!e.Data.GetDataPresent("ListCard")) return;
-
-            var item    = (EventCardItem)e.Data.GetData("ListCard");
             var dropPos = e.GetPosition(MapCanvas);
 
-            if (!IsOverlapping(dropPos))
+            if (e.Data.GetDataPresent("ListCard"))
             {
-                PlaceMarker(item, dropPos);
-                _vm.EventItems.Remove(item);
-                _vm.MapMarkerItems.Add(item);
+                var item = (EventCardItem)e.Data.GetData("ListCard");
+                if (!IsOverlapping(dropPos))
+                {
+                    PlaceMarker(item, dropPos);
+                    _vm.EventItems.Remove(item);
+                    _vm.MapMarkerItems.Add(item);
+                }
+            }
+            else if (e.Data.GetDataPresent("MapMarker"))
+            {
+                var item = (EventCardItem)e.Data.GetData("MapMarker");
+                FrameworkElement panel = null;
+                foreach (var kvp in _mapMarkers)
+                    if (kvp.Value == item) { panel = kvp.Key; break; }
+                if (panel != null && !IsOverlapping(dropPos, panel))
+                    RepositionMarker(panel, dropPos);
             }
             e.Handled = true;
         }
@@ -231,11 +249,12 @@ namespace EventsApp
             return (dep as ContentPresenter)?.DataContext as EventCardItem;
         }
 
-        private bool IsOverlapping(Point dropPos)
+        private bool IsOverlapping(Point dropPos, FrameworkElement exclude = null)
         {
             const double threshold = 40.0;
             foreach (var marker in _mapMarkers.Keys)
             {
+                if (marker == exclude) continue;
                 double cx = Canvas.GetLeft(marker) + 11;
                 double cy = Canvas.GetTop(marker) + 11;
                 double dist = Math.Sqrt(
@@ -243,6 +262,12 @@ namespace EventsApp
                 if (dist < threshold) return true;
             }
             return false;
+        }
+
+        private void RepositionMarker(FrameworkElement panel, Point dropPos)
+        {
+            Canvas.SetLeft(panel, dropPos.X - 11);
+            Canvas.SetTop(panel, dropPos.Y - 22);
         }
 
         private void PlaceMarker(EventCardItem item, Point dropPos)

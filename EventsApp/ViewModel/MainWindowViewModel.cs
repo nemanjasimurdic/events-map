@@ -12,6 +12,8 @@ namespace EventsApp.ViewModel
         public string Location { get; set; }
         public string DateText { get; set; }
         public string IconPath { get; set; }
+        public double? MapX { get; set; }
+        public double? MapY { get; set; }
 
         private bool _isVisibleOnMap = true;
         public bool IsVisibleOnMap
@@ -89,13 +91,20 @@ namespace EventsApp.ViewModel
                         ? ev.CurrentYearDate.Value.ToString("yyyy-MM-dd")
                         : "TBD";
 
-                    EventItems.Add(new EventCardItem
+                    var card = new EventCardItem
                     {
                         Name     = ev.Name,
                         Location = $"{ev.City}, {ev.Country}",
                         DateText = dateText,
-                        IconPath = iconPath ?? pack + "Resources/Images/world-map.png"
-                    });
+                        IconPath = iconPath ?? pack + "Resources/Images/world-map.png",
+                        MapX     = ev.MapX,
+                        MapY     = ev.MapY
+                    };
+
+                    if (ev.MapX.HasValue && ev.MapY.HasValue)
+                        MapMarkerItems.Add(card);
+                    else
+                        EventItems.Add(card);
                 }
             }
             catch (Exception) { }

@@ -65,8 +65,8 @@
     ],
     "CurrentYearDate": "2026-01-18",
     "TagIds": ["4", "5"],
-    "MapX": null,
-    "MapY": null
+    "MapX": 550,
+    "MapY": 400
   },
   {
     "Id": 4,
@@ -109,8 +109,8 @@
     ],
     "CurrentYearDate": "2026-06-04",
     "TagIds": ["4", "5"],
-    "MapX": null,
-    "MapY": null
+    "MapX": 100,
+    "MapY": 260
   },
   {
     "Id": 6,

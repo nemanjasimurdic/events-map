@@ -124,6 +124,7 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
+    <Resource Include="Resources\Images\add.png" />
     <Resource Include="Resources\Images\close.png" />
     <Resource Include="Resources\Images\event-type.png" />
     <Resource Include="Resources\Images\event.png" />
