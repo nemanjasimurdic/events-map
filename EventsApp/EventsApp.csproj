@@ -60,6 +60,14 @@
     <Compile Include="Model\Event.cs" />
     <Compile Include="Model\EventType.cs" />
     <Compile Include="Model\Tag.cs" />
+    <Page Include="View\DeleteConfirmWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Compile Include="View\DeleteConfirmWindow.xaml.cs">
+      <DependentUpon>DeleteConfirmWindow.xaml</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
     <Page Include="View\EventDetailWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -154,6 +162,7 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
+    <Resource Include="Resources\Images\yes.png" />
     <Resource Include="Resources\Images\audience.png" />
     <Resource Include="Resources\Images\dollar.png" />
     <Resource Include="Resources\Images\add.png" />

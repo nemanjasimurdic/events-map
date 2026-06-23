@@ -30,5 +30,23 @@ namespace EventsApp.Pages
             dlg.Owner = Window.GetWindow(this);
             dlg.ShowDialog();
         }
+
+        private void DeleteButton_Click(object sender, RoutedEventArgs e)
+        {
+            var btn     = (Button)sender;
+            var rowItem = (EventRowItem)btn.DataContext;
+
+            var dlg = new DeleteConfirmWindow("Are you sure you want to delete this event?");
+            dlg.Owner = Window.GetWindow(this);
+            dlg.ShowDialog();
+            if (dlg.DialogResult != true) return;
+
+            var svc    = new EventService();
+            var events = svc.LoadEvents();
+            events.RemoveAll(ev => ev.Id == rowItem.EventId);
+            svc.SaveEvents(events);
+
+            ((EventsViewModel)DataContext).Events.Remove(rowItem);
+        }
     }
 }

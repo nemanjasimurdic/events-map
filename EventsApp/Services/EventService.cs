@@ -8,10 +8,19 @@ namespace EventsApp.Services
 {
     public class EventService
     {
-        private static readonly string BaseDir    = AppDomain.CurrentDomain.BaseDirectory;
-        private static readonly string EventsPath = Path.Combine(BaseDir, "Data", "events.json");
-        private static readonly string TypesPath  = Path.Combine(BaseDir, "Data", "eventTypes.json");
-        private static readonly string TagsPath   = Path.Combine(BaseDir, "Data", "tags.json");
+        // In Debug the binary is in bin\Debug\, so walk up two levels to reach the project's
+        // Data\ folder. This ensures saves survive a VS rebuild (PreserveNewest would otherwise
+        // overwrite bin\Debug\Data\ with the original source on the next F5).
+#if DEBUG
+        private static readonly string DataDir =
+            Path.GetFullPath(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "..", "..", "Data"));
+#else
+        private static readonly string DataDir =
+            Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Data");
+#endif
+        private static readonly string EventsPath = Path.Combine(DataDir, "events.json");
+        private static readonly string TypesPath  = Path.Combine(DataDir, "eventTypes.json");
+        private static readonly string TagsPath   = Path.Combine(DataDir, "tags.json");
 
         public List<Event> LoadEvents()
         {
@@ -76,6 +85,56 @@ namespace EventsApp.Services
 
             var serializer = new JavaScriptSerializer();
             return serializer.Deserialize<List<Tag>>(File.ReadAllText(TagsPath));
+        }
+
+        public void SaveEvents(List<Event> events)
+        {
+            var list = new List<Dictionary<string, object>>();
+            foreach (var ev in events)
+            {
+                List<string> histDates = null;
+                if (ev.HistoryDates != null)
+                {
+                    histDates = new List<string>();
+                    foreach (var d in ev.HistoryDates)
+                        histDates.Add(d.ToString("yyyy-MM-dd"));
+                }
+
+                list.Add(new Dictionary<string, object>
+                {
+                    { "Id",              ev.Id                  },
+                    { "Name",            ev.Name                },
+                    { "Description",     ev.Description         },
+                    { "EventTypeId",     ev.EventTypeId         },
+                    { "Attendance",      (int)ev.Attendance     },
+                    { "IconPath",        (object)ev.IconPath    },
+                    { "IsHumanitarian",  ev.IsHumanitarian      },
+                    { "AverageCost",     ev.AverageCost         },
+                    { "Country",         ev.Country             },
+                    { "City",            ev.City                },
+                    { "HistoryDates",    (object)histDates      },
+                    { "CurrentYearDate", ev.CurrentYearDate.HasValue
+                                            ? (object)ev.CurrentYearDate.Value.ToString("yyyy-MM-dd")
+                                            : null             },
+                    { "TagIds",          (object)ev.TagIds      },
+                    { "MapX",            ev.MapX.HasValue ? (object)ev.MapX.Value : null },
+                    { "MapY",            ev.MapY.HasValue ? (object)ev.MapY.Value : null },
+                });
+            }
+            var serializer = new JavaScriptSerializer();
+            File.WriteAllText(EventsPath, serializer.Serialize(list));
+        }
+
+        public void SaveEventTypes(List<EventType> types)
+        {
+            var serializer = new JavaScriptSerializer();
+            File.WriteAllText(TypesPath, serializer.Serialize(types));
+        }
+
+        public void SaveTags(List<Tag> tags)
+        {
+            var serializer = new JavaScriptSerializer();
+            File.WriteAllText(TagsPath, serializer.Serialize(tags));
         }
     }
 }

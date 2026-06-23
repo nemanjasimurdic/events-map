@@ -46,7 +46,7 @@ namespace EventsApp.ViewModel
                     iconPath = pack + typeMap[ev.EventTypeId].IconPath;
 
                 var typeName = typeMap.ContainsKey(ev.EventTypeId)
-                    ? typeMap[ev.EventTypeId].Name : "";
+                    ? typeMap[ev.EventTypeId].Name : "Unknown type";
 
                 Events.Add(new EventRowItem
                 {

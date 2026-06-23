@@ -28,5 +28,23 @@ namespace EventsApp.Pages
             dlg.Owner = Window.GetWindow(this);
             dlg.ShowDialog();
         }
+
+        private void DeleteButton_Click(object sender, RoutedEventArgs e)
+        {
+            var btn     = (Button)sender;
+            var rowItem = (TagRowItem)btn.DataContext;
+
+            var dlg = new DeleteConfirmWindow("Are you sure you want to delete this tag?");
+            dlg.Owner = Window.GetWindow(this);
+            dlg.ShowDialog();
+            if (dlg.DialogResult != true) return;
+
+            var svc  = new EventService();
+            var tags = svc.LoadTags();
+            tags.RemoveAll(t => t.Id == rowItem.Code);
+            svc.SaveTags(tags);
+
+            ((TagsViewModel)DataContext).Tags.Remove(rowItem);
+        }
     }
 }

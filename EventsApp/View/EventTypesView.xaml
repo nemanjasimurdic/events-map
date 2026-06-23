@@ -190,7 +190,8 @@
                                            Width="24" Height="24"/>
                                 </Button>
                                 <Button Background="Transparent" BorderThickness="0"
-                                        Padding="8" Margin="8,0,0,0" >
+                                        Padding="8" Margin="8,0,0,0"
+                                        Click="DeleteButton_Click">
                                     <Image Source="/Resources/Images/delete.png"
                                            Width="24" Height="24"/>
                                 </Button>

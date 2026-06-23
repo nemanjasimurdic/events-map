@@ -1,0 +1,43 @@
+<Window x:Class="EventsApp.View.DeleteConfirmWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Confirm delete"
+        Width="380" Height="230"
+        ResizeMode="NoResize"
+        WindowStartupLocation="CenterOwner"
+        ShowInTaskbar="False">
+
+    <Grid>
+        <!-- Text: 30px from the top, left, and right of the window -->
+        <TextBlock x:Name="MessageText"
+                   Margin="30,30,30,0"
+                   FontSize="20"
+                   TextAlignment="Center"
+                   TextWrapping="Wrap"
+                   VerticalAlignment="Top"/>
+
+        <!-- Button pair: anchored 20px from the bottom of the window -->
+        <StackPanel Orientation="Horizontal"
+                    VerticalAlignment="Bottom" HorizontalAlignment="Center"
+                    Margin="0,0,0,20">
+            <Button Width="90" Height="40" Padding="8,6" Margin="0,0,50,0"
+                     Click="YesButton_Click">
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                    <Image Source="/Resources/Images/yes.png"
+                           Width="14" Height="14" VerticalAlignment="Center"/>
+                    <TextBlock Text="Yes" FontSize="12"
+                               Margin="6,0,0,0" VerticalAlignment="Center"/>
+                </StackPanel>
+            </Button>
+            <Button Width="90" Height="40" Padding="8,6"
+                    Click="NoButton_Click">
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                    <Image Source="/Resources/Images/close.png"
+                           Width="14" Height="14" VerticalAlignment="Center"/>
+                    <TextBlock Text="No" FontSize="12"
+                               Margin="6,0,0,0" VerticalAlignment="Center"/>
+                </StackPanel>
+            </Button>
+        </StackPanel>
+    </Grid>
+</Window>
