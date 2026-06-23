@@ -60,6 +60,30 @@
     <Compile Include="Model\Event.cs" />
     <Compile Include="Model\EventType.cs" />
     <Compile Include="Model\Tag.cs" />
+    <Page Include="View\EventDetailWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Compile Include="View\EventDetailWindow.xaml.cs">
+      <DependentUpon>EventDetailWindow.xaml</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
+    <Page Include="View\EventTypeDetailWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Compile Include="View\EventTypeDetailWindow.xaml.cs">
+      <DependentUpon>EventTypeDetailWindow.xaml</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
+    <Page Include="View\TagDetailWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Compile Include="View\TagDetailWindow.xaml.cs">
+      <DependentUpon>TagDetailWindow.xaml</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
     <Page Include="View\EventsView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -95,6 +119,9 @@
     <Compile Include="Converters\PercentageToPieSliceConverter.cs" />
     <Compile Include="Services\EventService.cs" />
     <Compile Include="VML\ViewModelLocator.cs" />
+    <Compile Include="ViewModel\EventDetailViewModel.cs" />
+    <Compile Include="ViewModel\EventTypeDetailViewModel.cs" />
+    <Compile Include="ViewModel\TagDetailViewModel.cs" />
     <Compile Include="ViewModel\EventsViewModel.cs" />
     <Compile Include="ViewModel\EventTypesViewModel.cs" />
     <Compile Include="ViewModel\TagsViewModel.cs" />
@@ -127,6 +154,8 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
+    <Resource Include="Resources\Images\audience.png" />
+    <Resource Include="Resources\Images\dollar.png" />
     <Resource Include="Resources\Images\add.png" />
     <Resource Include="Resources\Images\close.png" />
     <Resource Include="Resources\Images\delete.png" />

@@ -179,17 +179,18 @@
                                         HorizontalAlignment="Center"
                                         VerticalAlignment="Center">
                                 <Button Background="Transparent" BorderThickness="0"
-                                        Padding="8" ToolTip="Info">
+                                        Padding="8" 
+                                        Click="InfoButton_Click">
                                     <Image Source="/Resources/Images/info.png"
                                            Width="24" Height="24"/>
                                 </Button>
                                 <Button Background="Transparent" BorderThickness="0"
-                                        Padding="8" Margin="8,0,0,0" ToolTip="Edit">
+                                        Padding="8" Margin="8,0,0,0" >
                                     <Image Source="/Resources/Images/edit.png"
                                            Width="24" Height="24"/>
                                 </Button>
                                 <Button Background="Transparent" BorderThickness="0"
-                                        Padding="8" Margin="8,0,0,0" ToolTip="Delete">
+                                        Padding="8" Margin="8,0,0,0" >
                                     <Image Source="/Resources/Images/delete.png"
                                            Width="24" Height="24"/>
                                 </Button>
