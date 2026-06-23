@@ -1,6 +1,8 @@
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Windows.Data;
 using EventsApp.Services;
 
 namespace EventsApp.ViewModel
@@ -28,12 +30,39 @@ namespace EventsApp.ViewModel
         public ObservableCollection<TagRowItem> Tags { get; }
             = new ObservableCollection<TagRowItem>();
 
+        private ICollectionView _view;
+
+        private string _filterText = "";
+        public string FilterText
+        {
+            get => _filterText;
+            set
+            {
+                _filterText = value ?? "";
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(FilterText)));
+                _view.Refresh();
+            }
+        }
+
         public event PropertyChangedEventHandler PropertyChanged;
 
         public TagsViewModel()
         {
             Load();
+            _view = CollectionViewSource.GetDefaultView(Tags);
+            _view.Filter = FilterPredicate;
         }
+
+        private bool FilterPredicate(object obj)
+        {
+            if (string.IsNullOrEmpty(_filterText)) return true;
+            var item = (TagRowItem)obj;
+            return Contains(item.Description);
+        }
+
+        private bool Contains(string value) =>
+            value != null &&
+            value.IndexOf(_filterText, StringComparison.OrdinalIgnoreCase) >= 0;
 
         private void Load()
         {

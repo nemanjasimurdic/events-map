@@ -1,6 +1,8 @@
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Windows.Data;
 using EventsApp.Models;
 using EventsApp.Services;
 
@@ -8,11 +10,14 @@ namespace EventsApp.ViewModel
 {
     public class EventRowItem
     {
-        public string IconPath { get; set; }
-        public int    EventId  { get; set; }
-        public string Name     { get; set; }
-        public string TypeName { get; set; }
-        public string Location { get; set; }
+        public string IconPath    { get; set; }
+        public int    EventId     { get; set; }
+        public string Name        { get; set; }
+        public string TypeName    { get; set; }
+        public string Location    { get; set; }
+        public string Country     { get; set; }
+        public string City        { get; set; }
+        public string Description { get; set; }
     }
 
     public class EventsViewModel : INotifyPropertyChanged
@@ -20,12 +25,43 @@ namespace EventsApp.ViewModel
         public ObservableCollection<EventRowItem> Events { get; }
             = new ObservableCollection<EventRowItem>();
 
+        private ICollectionView _view;
+
+        private string _filterText = "";
+        public string FilterText
+        {
+            get => _filterText;
+            set
+            {
+                _filterText = value ?? "";
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(FilterText)));
+                _view.Refresh();
+            }
+        }
+
         public event PropertyChangedEventHandler PropertyChanged;
 
         public EventsViewModel()
         {
             Load();
+            _view = CollectionViewSource.GetDefaultView(Events);
+            _view.Filter = FilterPredicate;
         }
+
+        private bool FilterPredicate(object obj)
+        {
+            if (string.IsNullOrEmpty(_filterText)) return true;
+            var item = (EventRowItem)obj;
+            return Contains(item.Name)        ||
+                   Contains(item.TypeName)    ||
+                   Contains(item.Country)     ||
+                   Contains(item.City)        ||
+                   Contains(item.Description);
+        }
+
+        private bool Contains(string value) =>
+            value != null &&
+            value.IndexOf(_filterText, StringComparison.OrdinalIgnoreCase) >= 0;
 
         private void Load()
         {
@@ -50,11 +86,14 @@ namespace EventsApp.ViewModel
 
                 Events.Add(new EventRowItem
                 {
-                    IconPath = iconPath ?? pack + "Resources/Images/world-map.png",
-                    EventId  = ev.Id,
-                    Name     = ev.Name,
-                    TypeName = typeName,
-                    Location = $"{ev.City}, {ev.Country}"
+                    IconPath    = iconPath ?? pack + "Resources/Images/world-map.png",
+                    EventId     = ev.Id,
+                    Name        = ev.Name,
+                    TypeName    = typeName,
+                    Location    = $"{ev.City}, {ev.Country}",
+                    Country     = ev.Country,
+                    City        = ev.City,
+                    Description = ev.Description
                 });
             }
         }

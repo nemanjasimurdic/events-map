@@ -13,6 +13,14 @@ namespace EventsApp.Pages
         {
             InitializeComponent();
             DataContext = new EventTypesViewModel();
+            FilterBox.TextChanged += (s, e) =>
+                ((EventTypesViewModel)DataContext).FilterText = FilterBox.Text;
+        }
+
+        private void ResetFilter_Click(object sender, RoutedEventArgs e)
+        {
+            ((EventTypesViewModel)DataContext).FilterText = "";
+            FilterBox.Text = "";
         }
 
         private void InfoButton_Click(object sender, RoutedEventArgs e)

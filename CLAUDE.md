@@ -41,13 +41,15 @@ Navigation is done entirely in `MainWindow.xaml.cs`:
 - The "Event map" title button and the **back button** (`PageBackButton`) both call `ShowMapWorkspace()`. **The back button currently has no Click handler wired** — it needs one.
 - Hamburger menu item click handlers (`MenuEvents_Click`, etc.) are fully wired and call `NavigateTo`.
 
-### Data loading — EventService, JSON, no persistence
-`Services/EventService.cs` loads all data from three JSON files at `bin/Debug/Data/`:
+### Data loading and saving — EventService, JSON
+`Services/EventService.cs` loads and saves data using three JSON files:
 - `events.json` → `List<Event>`
 - `eventTypes.json` → `List<EventType>`
 - `tags.json` → `List<Tag>`
 
-Uses `System.Web.Script.Serialization.JavaScriptSerializer` (no external NuGet). `Event` requires manual deserialization because of `AttendanceRange` enum and nullable fields; `EventType` and `Tag` are deserialized directly. There is no save/write path yet — all edits would need to add `File.WriteAllText` with serialization.
+Uses `System.Web.Script.Serialization.JavaScriptSerializer` (no external NuGet). `Event` requires manual deserialization because of `AttendanceRange` enum and nullable fields; `EventType` and `Tag` are deserialized directly. `SaveEvents` manually builds `List<Dictionary<string,object>>` to preserve ISO date strings (JavaScriptSerializer emits `/Date(ticks)/` for DateTime). `SaveEventTypes` and `SaveTags` use direct `Serialize()`.
+
+**Data path (important):** In `#if DEBUG` builds, `EventService` reads and writes from the project's source `Data\` folder (`bin\Debug\..\..\Data`). This prevents VS rebuilds from overwriting saved changes via `CopyToOutputDirectory="PreserveNewest"`. In Release builds, it uses `Data\` next to the exe.
 
 ### Window size — fixed 1024×768, no resize
 `MainWindow` has `ResizeMode="NoResize"` and `Height="768" Width="1024"`.
@@ -83,33 +85,46 @@ EventsApp/
 │   └── AttendanceRange.cs  ← enum: Upto1000, From1000To5000, From5000To10000, Over10000
 │
 ├── ViewModel/
-│   ├── MainWindowViewModel.cs   ← EventCardItem (DTO), MainWindowViewModel
-│   │                               ObservableCollection<EventCardItem> EventItems (list panel)
-│   │                               ObservableCollection<EventCardItem> MapMarkerItems (on map)
-│   │                               string MapFilterText (real-time filter)
-│   ├── EventsViewModel.cs       ← EventRowItem (DTO), EventsViewModel
-│   │                               ObservableCollection<EventRowItem> Events
-│   ├── EventTypesViewModel.cs   ← EventTypeRowItem (DTO), EventTypesViewModel
-│   │                               ObservableCollection<EventTypeRowItem> EventTypes
-│   ├── TagsViewModel.cs         ← TagRowItem (DTO), TagsViewModel
-│   │                               ObservableCollection<TagRowItem> Tags
-│   │                               static ColorNames dictionary (hex → display name)
-│   └── StatisticsViewModel.cs   ← ChartBarItem (DTO), StatisticsViewModel
-│                                    ObservableCollection<ChartBarItem> EventsPerType
-│                                    ObservableCollection<ChartBarItem> EventsByAttendance
-│                                    double HumanitarianPercent, labels
+│   ├── MainWindowViewModel.cs     ← EventCardItem (DTO), MainWindowViewModel
+│   │                                 ObservableCollection<EventCardItem> EventItems (list panel)
+│   │                                 ObservableCollection<EventCardItem> MapMarkerItems (on map)
+│   │                                 string MapFilterText (real-time filter)
+│   ├── EventsViewModel.cs         ← EventRowItem (DTO), EventsViewModel
+│   │                                 ObservableCollection<EventRowItem> Events
+│   │                                 TypeName falls back to "Unknown type" for orphaned EventTypeId
+│   ├── EventTypesViewModel.cs     ← EventTypeRowItem (DTO), EventTypesViewModel
+│   │                                 ObservableCollection<EventTypeRowItem> EventTypes
+│   ├── TagsViewModel.cs           ← TagRowItem (DTO), TagsViewModel
+│   │                                 ObservableCollection<TagRowItem> Tags
+│   │                                 static ColorNames dictionary (hex → display name)
+│   ├── StatisticsViewModel.cs     ← ChartBarItem (DTO), StatisticsViewModel
+│   │                                 ObservableCollection<ChartBarItem> EventsPerType
+│   │                                 ObservableCollection<ChartBarItem> EventsByAttendance
+│   │                                 double HumanitarianPercent, labels
+│   ├── EventDetailViewModel.cs    ← read-only DTO for EventDetailWindow; defines TagChipItem
+│   │                                 resolves EventTypeId→name+icon, TagIds→chips,
+│   │                                 AttendanceRange→string, cost 0→"Free"
+│   ├── EventTypeDetailViewModel.cs ← read-only DTO for EventTypeDetailWindow
+│   └── TagDetailViewModel.cs      ← read-only DTO for TagDetailWindow
 │
 ├── View/
-│   ├── EventsView.xaml / .cs    ← Page, DataContext set in code-behind
+│   ├── EventsView.xaml / .cs          ← Page, DataContext set in code-behind
 │   ├── EventTypesView.xaml / .cs
 │   ├── TagsView.xaml / .cs
-│   └── StatisticsView.xaml / .cs
+│   ├── StatisticsView.xaml / .cs
+│   ├── EventDetailWindow.xaml / .cs   ← modal info dialog for a single Event
+│   ├── EventTypeDetailWindow.xaml / .cs ← modal info dialog for a single EventType
+│   ├── TagDetailWindow.xaml / .cs     ← modal info dialog for a single Tag
+│   └── DeleteConfirmWindow.xaml / .cs ← shared Yes/No confirmation dialog
+│                                          ctor takes message string; DialogResult=true on Yes
 │
 ├── VML/
 │   └── ViewModelLocator.cs      ← AutoHookedUpViewModel attached property (defined but not used)
 │
 ├── Services/
 │   └── EventService.cs          ← LoadEvents(), LoadEventTypes(), LoadTags()
+│                                   SaveEvents(), SaveEventTypes(), SaveTags()
+│                                   Data path: source Data\ in Debug, exe Data\ in Release
 │
 ├── Converters/
 │   └── PercentageToPieSliceConverter.cs  ← IValueConverter: double [0–1] → PathGeometry pie slice
@@ -120,12 +135,12 @@ EventsApp/
 │   └── tags.json          ← 5 tags with ColorHex values
 │
 └── Resources/Images/
-    ├── world-map.png        ← fixed map background
+    ├── world-map.png        ← fixed map background; also fallback icon for orphaned EventTypeId
     ├── film.png, music.png, tennis.png, basketball.png, art.png   ← event type icons
     ├── hamburger-menu.png, back.png, close.png
     ├── add.png, edit.png, delete.png, info.png, search.png, reset.png
     ├── event.png, event-type.png, tag.png, statistic.png
-    ├── location.png, date.png
+    ├── location.png, date.png, dollar.png, yes.png
 ```
 
 ---
@@ -153,27 +168,43 @@ EventsApp/
 - DataGrid columns: Icon (26×26), ID, Name, Type, Location, Actions (Info/Edit/Delete buttons, 24×24 icons).
 - Row height 52px, horizontal grid lines only, `#F5F5F5` header.
 - Action row: Add event + Search buttons (left), Filter TextBox with placeholder + Reset button (right).
-- Data loaded from JSON via `EventsViewModel` on construction.
-- **Info button is wired** (`InfoButton_Click` in `EventsView.xaml.cs`) — opens `EventDetailWindow` as a modal (`ShowDialog`). Add/Edit/Delete/Search/Filter/Reset buttons are still visual-only.
+- **Info button wired** — opens `EventDetailWindow` as modal (`ShowDialog`).
+- **Delete button wired** — opens `DeleteConfirmWindow`; on Yes: loads list, removes item, `SaveEvents`, removes from ObservableCollection. Add/Edit/Search/Filter/Reset are still visual-only.
 
 ### Event Detail Dialog (`View/EventDetailWindow.xaml`)
 - `Window`, 580×650, `ResizeMode="NoResize"`, `WindowStartupLocation="CenterOwner"`, `ShowInTaskbar="False"`.
-- `DataContext` is `EventDetailViewModel` (set in constructor, not via ViewModelLocator).
+- `DataContext` is `EventDetailViewModel` (set in constructor).
 - **Layout**: header row (back icon + "Event details" title) / `Rectangle` separator / `ScrollViewer` content / `Rectangle` separator / footer Close button.
 - **Content — two columns** (`2*` / `20` spacer / `1.5*`):
-  - Left: 56×56 event icon, name (18px Bold, no "Name:" label), event ID (muted), type badge (type icon 16×16 + type name), thin rule, description.
-  - Right: location (pin icon), current date (calendar icon), attendance (audience icon), average cost (dollar icon), humanitarian status (text indicator), thin rule, "Past dates" heading (calendar icon), scrollable list (max 130px) of past dates newest-first.
-- **Tags section** (full width below columns): tag icon + "Tags" heading, `WrapPanel` of rounded border chips. Each chip label is `"Description · ColorName"` (e.g. `"Outdoor · Green"`) — no color-only differentiation.
-- **ViewModel** (`ViewModel/EventDetailViewModel.cs`): plain data class (no `INotifyPropertyChanged` needed — read-only, constructed once). Also defines `TagChipItem { Label }`. Resolves EventTypeId → name+icon, TagIds → chip labels, AttendanceRange → readable string, cost 0 → "Free".
+  - Left: 56×56 event icon, name (18px Bold), event ID (muted), type badge (type icon 16×16 + type name), thin rule, description.
+  - Right: location (pin icon), current date (calendar icon), attendance (audience icon), average cost (dollar icon), humanitarian status, thin rule, "Past dates" heading, scrollable list (max 130px) newest-first.
+- **Tags section** (full width below columns): `WrapPanel` of rounded border chips. Each chip label is `"Description · ColorName"` — no color-only differentiation.
+- `EventDetailViewModel` falls back to `"Unknown"` / `event-type.png` if the EventType is missing.
 
 ### Event Types Page (`View/EventTypesView.xaml`)
 - DataGrid columns: Icon (26×26), ID (`Code`), Name, Actions (Info/Edit/Delete).
-- Same action row pattern as Events page. **All buttons visual-only.**
+- **Info button wired** — opens `EventTypeDetailWindow` as modal.
+- **Delete button wired** — opens `DeleteConfirmWindow`; on Yes: loads list, removes item, `SaveEventTypes`, removes from ObservableCollection. Add/Edit/Search/Filter/Reset are still visual-only.
+
+### Event Type Detail Dialog (`View/EventTypeDetailWindow.xaml`)
+- `Window`, 420×320, `ResizeMode="NoResize"`, `WindowStartupLocation="CenterOwner"`.
+- Shows 48×48 icon, name (bold), ID, description. Close button in footer.
 
 ### Tags Page (`View/TagsView.xaml`)
 - DataGrid columns: ID (`Code`), Color (displays as `"Green (#4CAF50)"` via `ColorDisplay` property), Actions (Info/Edit/Delete).
 - Note: Tag `Description` field is loaded but **not displayed** in the current DataGrid — it's only in the DTO.
-- Same action row pattern. **All buttons visual-only.**
+- **Info button wired** — opens `TagDetailWindow` as modal.
+- **Delete button wired** — opens `DeleteConfirmWindow`; on Yes: loads list, removes item, `SaveTags`, removes from ObservableCollection. Add/Edit/Search/Filter/Reset are still visual-only.
+
+### Tag Detail Dialog (`View/TagDetailWindow.xaml`)
+- `Window`, 380×340, `ResizeMode="NoResize"`, `WindowStartupLocation="CenterOwner"`.
+- Shows ID, color swatch (Border with ColorHex background), color display string, description. Close button in footer.
+
+### Delete Confirm Dialog (`View/DeleteConfirmWindow.xaml`)
+- Shared across all three list pages. Constructor takes a `string message`.
+- Grid layout: TextBlock anchored top (Margin="30,30,30,0", FontSize=20), Yes/No StackPanel anchored bottom (Margin="0,0,0,20").
+- Yes button: sets `DialogResult = true`. No button: sets `DialogResult = false`.
+- Size: 380×230. Callers check `dlg.DialogResult == true` before proceeding.
 
 ### Statistics Page (`View/StatisticsView.xaml`)
 - 3 charts displayed horizontally centred, each in a rounded border card:
@@ -186,15 +217,14 @@ EventsApp/
 
 ## What Is NOT Done Yet
 
-- **Back button** (`PageBackButton`) has no `Click` handler — it's visible when on a page but clicking it does nothing.
-- **Info button on Events page** is now wired and opens `EventDetailWindow`.
-- **Add/Edit/Delete buttons** on Events, Event Types, and Tags pages have no `Click` handlers and no backing forms/dialogs. Info buttons on Event Types and Tags pages also have no handlers yet.
-- **Search button** on all three list pages has no handler.
-- **Filter TextBox** on list pages has no binding or handler (the map workspace filter works; the per-page ones do not).
-- **Reset button** on list pages has no handler.
-- **Data persistence** — `EventService` has no write methods; all changes are in-memory only.
-- **Event detail / info dialog** — no form exists yet for viewing or editing a full event record.
+- **Back button** (`PageBackButton`) has no `Click` handler — visible on all pages but clicking does nothing.
+- **Add button** on Events, Event Types, and Tags pages — no handler, no add form/dialog.
+- **Edit button** on Events, Event Types, and Tags pages — no handler, no edit form/dialog.
+- **Search button** on all three list pages — no handler.
+- **Filter TextBox** on list pages — no binding or handler (the map workspace filter works; per-page ones do not).
+- **Reset button** on list pages — no handler.
 - **Tag `Description`** is loaded but not shown in the Tags DataGrid.
+- **MapWorkspace in-session consistency**: `MainWindowViewModel` loads once at startup. Deleting an EventType mid-session won't update the map event cards until next restart — this is expected and acceptable for the academic scope.
 
 ---
 

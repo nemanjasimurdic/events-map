@@ -59,7 +59,7 @@
                         </TextBlock.Style>
                     </TextBlock>
                 </Grid>
-                <Button Padding="7,4" Margin="8,0,0,0">
+                <Button Padding="7,4" Margin="8,0,0,0" Click="ResetFilter_Click">
                     <StackPanel Orientation="Horizontal">
                         <Image Source="/Resources/Images/reset.png"
                                Width="14" Height="14" VerticalAlignment="Center"/>
