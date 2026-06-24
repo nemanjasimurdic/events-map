@@ -29,7 +29,6 @@ namespace EventsApp.View
 
             var svc      = new EventService();
             var existing = svc.LoadEventTypes();
-            // ID is valid if not taken by a DIFFERENT event type
             if (existing.Any(t => t.Id == id && t.Id != vm.OriginalId)) return;
 
             var updatedType = new EventType

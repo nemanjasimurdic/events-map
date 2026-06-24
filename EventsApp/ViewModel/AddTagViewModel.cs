@@ -32,7 +32,6 @@ namespace EventsApp.ViewModel
             set => SetProperty(ref _selectedColor, value);
         }
 
-        // ── Validation helpers ───────────────────────────────────────────────
 
         public bool   IdHasError    => GetErrors(nameof(IdText)).Cast<string>().Any();
         public bool   ColorHasError => GetErrors(nameof(SelectedColor)).Cast<string>().Any();
@@ -42,7 +41,6 @@ namespace EventsApp.ViewModel
 
         public void SetIdError(string message) => SetErrors(nameof(IdText), new[] { message });
 
-        // ── Validation logic ─────────────────────────────────────────────────
 
         protected override void ValidateProperty(object value, string propertyName)
         {
@@ -68,7 +66,6 @@ namespace EventsApp.ViewModel
             }
         }
 
-        // ── Collections ──────────────────────────────────────────────────────
 
         public List<ColorComboItem> ColorItems { get; } = new List<ColorComboItem>
         {
@@ -82,7 +79,6 @@ namespace EventsApp.ViewModel
             new ColorComboItem { DisplayName = "Indigo", Hex = "#3F51B5" },
         };
 
-        // ── Constructor ──────────────────────────────────────────────────────
 
         public AddTagViewModel()
         {

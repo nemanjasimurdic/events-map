@@ -7,7 +7,6 @@
     <Page.Resources>
         <converters:PercentageToPieSliceConverter x:Key="PieConverter"/>
 
-        <!-- Diagonal-hatch fill for standard (non-humanitarian) pie segment -->
         <DrawingBrush x:Key="HatchBrush" Viewport="0,0,8,8"
                       ViewportUnits="Absolute" TileMode="Tile">
             <DrawingBrush.Drawing>

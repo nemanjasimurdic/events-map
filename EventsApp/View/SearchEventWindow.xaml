@@ -16,7 +16,6 @@
             <RowDefinition Height="52"/>
         </Grid.RowDefinitions>
 
-        <!-- ── HEADER ── -->
         <StackPanel Grid.Row="0" Orientation="Horizontal"
                     VerticalAlignment="Center" Margin="16,0">
             <Image Source="/Resources/Images/back.png"
@@ -27,7 +26,6 @@
 
         <Rectangle Grid.Row="1" Fill="#E0E0E0"/>
 
-        <!-- ── FORM BODY ── -->
         <Grid Grid.Row="2" Margin="16,20,16,20">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*"/>
@@ -35,16 +33,13 @@
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
 
-            <!-- ── LEFT COLUMN ── -->
             <StackPanel Grid.Column="0">
 
-                <!-- Name -->
                 <TextBlock Text="Name:" FontSize="12" FontWeight="SemiBold"
                            Margin="0,0,0,3"/>
                 <TextBox Text="{Binding Name, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                          Padding="5,4" FontSize="12" Margin="0,0,0,10"/>
 
-                <!-- Type -->
                 <TextBlock Text="Event type:" FontSize="12" FontWeight="SemiBold"
                            Margin="0,0,0,3"/>
                 <ComboBox ItemsSource="{Binding EventTypeItems}"
@@ -52,19 +47,16 @@
                           DisplayMemberPath="Name"
                           Padding="5,3" FontSize="12" Margin="0,0,0,10"/>
 
-                <!-- Country -->
                 <TextBlock Text="Country:" FontSize="12" FontWeight="SemiBold"
                            Margin="0,0,0,3"/>
                 <TextBox Text="{Binding Country, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                          Padding="5,4" FontSize="12" Margin="0,0,0,10"/>
 
-                <!-- City -->
                 <TextBlock Text="City:" FontSize="12" FontWeight="SemiBold"
                            Margin="0,0,0,3"/>
                 <TextBox Text="{Binding City, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                          Padding="5,4" FontSize="12" Margin="0,0,0,10"/>
 
-                <!-- Description -->
                 <TextBlock Text="Description:" FontSize="12" FontWeight="SemiBold"
                            Margin="0,0,0,3"/>
                 <TextBox Text="{Binding Description, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
@@ -75,10 +67,8 @@
 
             </StackPanel>
 
-            <!-- ── RIGHT COLUMN ── -->
             <StackPanel Grid.Column="2">
 
-                <!-- Attendance -->
                 <TextBlock Text="Attendance:" FontSize="12" FontWeight="SemiBold"
                            Margin="0,0,0,3"/>
                 <ComboBox ItemsSource="{Binding AttendanceItems}"
@@ -86,13 +76,11 @@
                           DisplayMemberPath="DisplayName"
                           Padding="5,3" FontSize="12" Margin="0,0,0,10"/>
 
-                <!-- Avg Cost -->
                 <TextBlock Text="AvgCost (USD):" FontSize="12" FontWeight="SemiBold"
                            Margin="0,0,0,3"/>
                 <TextBox Text="{Binding AvgCostText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                          Padding="5,4" FontSize="12" Margin="0,0,0,10"/>
 
-                <!-- Is Humanitarian -->
                 <TextBlock Text="Is humanitarian:" FontSize="12" FontWeight="SemiBold"
                            Margin="0,0,0,6"/>
                 <CheckBox IsChecked="{Binding IsHumanitarianFilter, Mode=TwoWay}"
@@ -103,7 +91,6 @@
 
         <Rectangle Grid.Row="3" Fill="#E0E0E0"/>
 
-        <!-- ── FOOTER ── -->
         <StackPanel Grid.Row="4" Orientation="Horizontal"
                     HorizontalAlignment="Right" VerticalAlignment="Center"
                     Margin="0,0,16,0">

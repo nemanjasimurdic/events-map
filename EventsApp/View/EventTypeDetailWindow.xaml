@@ -16,7 +16,7 @@
             <RowDefinition Height="52"/>
         </Grid.RowDefinitions>
 
-        <!-- ── HEADER ── -->
+
         <StackPanel Grid.Row="0" Orientation="Horizontal"
                     VerticalAlignment="Center" Margin="16,0">
             <Image Source="/Resources/Images/back.png"
@@ -27,28 +27,22 @@
 
         <Rectangle Grid.Row="1" Fill="#E0E0E0"/>
 
-        <!-- ── CONTENT ── -->
         <ScrollViewer Grid.Row="2" VerticalScrollBarVisibility="Auto">
             <StackPanel Margin="24,20,24,20">
 
-                <!-- Icon -->
                 <Image Source="{Binding IconPath}"
                        Width="56" Height="56" Stretch="Uniform"
                        HorizontalAlignment="Left"/>
 
-                <!-- Name (primary heading) -->
                 <TextBlock Text="{Binding Name}"
                            FontSize="16" FontWeight="Bold"
                            TextWrapping="Wrap" Margin="0,12,0,0"/>
 
-                <!-- ID (muted sub-heading) -->
                 <TextBlock Text="{Binding Code, StringFormat='Type \#{0}'}"
                            FontSize="11" Foreground="#888888" Margin="0,4,0,0"/>
 
-                <!-- Thin rule before description -->
                 <Rectangle Height="1" Fill="#E8E8E8" Margin="0,14,0,14"/>
 
-                <!-- Description -->
                 <TextBlock Text="{Binding Description}"
                            FontSize="12" TextWrapping="Wrap"
                            LineHeight="19" Foreground="#333333"/>
@@ -58,7 +52,7 @@
 
         <Rectangle Grid.Row="3" Fill="#E0E0E0"/>
 
-        <!-- ── FOOTER ── -->
+
         <Grid Grid.Row="4">
             <Button HorizontalAlignment="Right" VerticalAlignment="Center"
                     Margin="0,0,16,0" Padding="12,6"

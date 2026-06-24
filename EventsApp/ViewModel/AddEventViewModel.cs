@@ -54,7 +54,6 @@ namespace EventsApp.ViewModel
 
     public class AddEventViewModel : ViewModelBase
     {
-        // ── Form fields ──────────────────────────────────────────────────────
 
         private string _eventIdText = "";
         public string EventIdText
@@ -146,7 +145,6 @@ namespace EventsApp.ViewModel
 
         public string IconPreviewPath => _selectedIcon?.PreviewPath;
 
-        // ── Validation helpers ───────────────────────────────────────────────
 
         public bool EventIdHasError  => GetErrors(nameof(EventIdText)).Cast<string>().Any();
         public bool NameHasError     => GetErrors(nameof(Name)).Cast<string>().Any();
@@ -164,7 +162,6 @@ namespace EventsApp.ViewModel
 
         public void SetEventIdError(string message) => SetErrors(nameof(EventIdText), new[] { message });
 
-        // ── Validation logic ─────────────────────────────────────────────────
 
         protected override void ValidateProperty(object value, string propertyName)
         {
@@ -218,7 +215,6 @@ namespace EventsApp.ViewModel
             }
         }
 
-        // ── Collections ──────────────────────────────────────────────────────
 
         public ObservableCollection<EventTypeComboItem> EventTypeItems { get; }
             = new ObservableCollection<EventTypeComboItem>();
@@ -299,7 +295,6 @@ namespace EventsApp.ViewModel
             };
         }
 
-        // ── Methods ──────────────────────────────────────────────────────────
 
         public void AddPastDate()
         {

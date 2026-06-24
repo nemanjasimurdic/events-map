@@ -36,7 +36,6 @@ namespace EventsApp.View
 
             var svc            = new EventService();
             var existingEvents = svc.LoadEvents();
-            // ID is valid if parseable AND not already taken by a DIFFERENT event
             bool idUnique = idParsed && !existingEvents.Any(ev => ev.Id == eventId && ev.Id != vm.OriginalId);
 
             vm.EventIdHasError = !idParsed || !idUnique;

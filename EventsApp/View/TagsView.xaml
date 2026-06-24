@@ -12,10 +12,8 @@
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
 
-        <!-- ── ACTION ROW ── -->
         <Grid Grid.Row="1">
 
-            <!-- Left: Add tag + Search -->
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Left"
                         VerticalAlignment="Center">
                 <Button Padding="7,4" Margin="0,0,8,0" Click="AddTag_Click">
@@ -36,7 +34,6 @@
                 </Button>
             </StackPanel>
 
-            <!-- Right: Filter label + TextBox + Reset -->
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Right"
                         VerticalAlignment="Center">
                 <TextBlock Text="Filter tags:" FontSize="13"
@@ -70,7 +67,7 @@
             </StackPanel>
         </Grid>
 
-        <!-- ── DATA GRID ── -->
+
         <DataGrid Grid.Row="3"
                   ItemsSource="{Binding Tags}"
                   AutoGenerateColumns="False"
@@ -116,7 +113,6 @@
 
             <DataGrid.Columns>
 
-                <!-- ID -->
                 <DataGridTextColumn Header="ID" Binding="{Binding Code}" Width="1*">
                     <DataGridTextColumn.ElementStyle>
                         <Style TargetType="TextBlock">
@@ -126,7 +122,6 @@
                     </DataGridTextColumn.ElementStyle>
                 </DataGridTextColumn>
 
-                <!-- Color -->
                 <DataGridTextColumn Header="Color" Binding="{Binding ColorDisplay}" Width="3*">
                     <DataGridTextColumn.ElementStyle>
                         <Style TargetType="TextBlock">
@@ -136,7 +131,6 @@
                     </DataGridTextColumn.ElementStyle>
                 </DataGridTextColumn>
 
-                <!-- Actions -->
                 <DataGridTemplateColumn Header="Actions" Width="2*" IsReadOnly="True">
                     <DataGridTemplateColumn.HeaderStyle>
                         <Style TargetType="DataGridColumnHeader">

@@ -23,7 +23,6 @@ namespace EventsApp.View
             vm.ValidateAllProperties();
             if (vm.HasErrors) return;
 
-            // IdText is already validated as a positive integer by the ViewModel
             int id = int.Parse(vm.IdText.Trim());
 
             var svc      = new EventService();

@@ -9,7 +9,6 @@
         ShowInTaskbar="False">
 
     <Window.Resources>
-        <!-- Larger calendar day cells for touch -->
         <Style x:Key="TouchCalendarDay"
                TargetType="{x:Type prims:CalendarDayButton}"
                BasedOn="{StaticResource {x:Type prims:CalendarDayButton}}">
@@ -33,7 +32,7 @@
             <RowDefinition Height="52"/>
         </Grid.RowDefinitions>
 
-        <!-- ── HEADER ── -->
+
         <StackPanel Grid.Row="0" Orientation="Horizontal"
                     VerticalAlignment="Center" Margin="16,0">
             <Image Source="/Resources/Images/back.png"
@@ -44,7 +43,7 @@
 
         <Rectangle Grid.Row="1" Fill="#E0E0E0"/>
 
-        <!-- ── FORM BODY ── -->
+
         <Grid Grid.Row="2" Margin="16,20,16,20">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*"/>
@@ -52,10 +51,8 @@
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
 
-            <!-- ── LEFT COLUMN ── -->
             <StackPanel Grid.Column="0">
 
-                <!-- Icon (optional) -->
                 <TextBlock Text="Icon (optional):" FontSize="12" FontWeight="SemiBold"
                            Margin="0,0,0,3"/>
                 <StackPanel Orientation="Horizontal" Margin="0,0,0,8">
@@ -68,7 +65,6 @@
                            Margin="10,0,0,0" VerticalAlignment="Center"/>
                 </StackPanel>
 
-                <!-- Event ID -->
                 <TextBlock Text="Event ID:" FontSize="12" FontWeight="SemiBold"
                            Margin="0,0,0,3"/>
                 <StackPanel Margin="0,0,0,8">
@@ -82,7 +78,6 @@
                     </StackPanel>
                 </StackPanel>
 
-                <!-- Name -->
                 <TextBlock Text="Name:" FontSize="12" FontWeight="SemiBold"
                            Margin="0,0,0,3"/>
                 <StackPanel Margin="0,0,0,8">
@@ -96,7 +91,6 @@
                     </StackPanel>
                 </StackPanel>
 
-                <!-- Description -->
                 <TextBlock Text="Description:" FontSize="12" FontWeight="SemiBold"
                            Margin="0,0,0,3"/>
                 <TextBox Text="{Binding Description, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
@@ -106,7 +100,6 @@
                          VerticalContentAlignment="Top"
                          Margin="0,0,0,8"/>
 
-                <!-- Event type name -->
                 <TextBlock Text="Event type name:" FontSize="12" FontWeight="SemiBold"
                            Margin="0,0,0,3"/>
                 <StackPanel Margin="0,0,0,8">
@@ -122,7 +115,6 @@
                     </StackPanel>
                 </StackPanel>
 
-                <!-- Attendance -->
                 <TextBlock Text="Attendance:" FontSize="12" FontWeight="SemiBold"
                            Margin="0,0,0,3"/>
                 <StackPanel Margin="0,0,0,8">
@@ -138,7 +130,6 @@
                     </StackPanel>
                 </StackPanel>
 
-                <!-- AvgCost (USD) -->
                 <TextBlock Text="AvgCost (USD):" FontSize="12" FontWeight="SemiBold"
                            Margin="0,0,0,3"/>
                 <StackPanel>
@@ -154,10 +145,9 @@
 
             </StackPanel>
 
-            <!-- ── RIGHT COLUMN ── -->
+
             <StackPanel Grid.Column="2">
 
-                <!-- Location -->
                 <TextBlock Text="Location:" FontSize="12" FontWeight="SemiBold"
                            Margin="0,0,0,3"/>
                 <TextBlock Text="Country:" FontSize="11" Foreground="#555555"
@@ -169,7 +159,6 @@
                 <TextBox Text="{Binding City, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                          Padding="5,4" FontSize="12" Margin="0,0,0,8"/>
 
-                <!-- Date -->
                 <TextBlock Text="Date:" FontSize="12" FontWeight="SemiBold"
                            Margin="0,0,0,3"/>
                 <DatePicker SelectedDate="{Binding CurrentYearDate, Mode=TwoWay}"
@@ -177,7 +166,6 @@
                             CalendarStyle="{StaticResource TouchCalendar}"
                             Margin="0,0,0,8"/>
 
-                <!-- Past Dates -->
                 <TextBlock Text="Past Dates:" FontSize="12" FontWeight="SemiBold"
                            Margin="0,0,0,3"/>
                 <StackPanel Orientation="Horizontal" Margin="0,0,0,4">
@@ -218,7 +206,6 @@
                     </ScrollViewer>
                 </Border>
 
-                <!-- Tags -->
                 <TextBlock Text="Tags:" FontSize="12" FontWeight="SemiBold"
                            Margin="0,0,0,3"/>
                 <Border BorderBrush="#CCCCCC" BorderThickness="1" CornerRadius="2"
@@ -236,7 +223,6 @@
                     </ScrollViewer>
                 </Border>
 
-                <!-- IsHumanitarian -->
                 <TextBlock Text="IsHumanitarian:" FontSize="12" FontWeight="SemiBold"
                            Margin="0,0,0,3"/>
                 <CheckBox IsChecked="{Binding IsHumanitarian, Mode=TwoWay}"
@@ -247,7 +233,7 @@
 
         <Rectangle Grid.Row="3" Fill="#E0E0E0"/>
 
-        <!-- ── FOOTER ── -->
+
         <StackPanel Grid.Row="4" Orientation="Horizontal"
                     HorizontalAlignment="Right" VerticalAlignment="Center"
                     Margin="0,0,16,0">

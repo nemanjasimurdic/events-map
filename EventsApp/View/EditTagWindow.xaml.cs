@@ -29,7 +29,6 @@ namespace EventsApp.View
 
             var svc      = new EventService();
             var existing = svc.LoadTags();
-            // ID is valid if not taken by a DIFFERENT tag
             if (existing.Any(t => t.Id == id && t.Id != vm.OriginalId)) return;
 
             var updatedTag = new Tag

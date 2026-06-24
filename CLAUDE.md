@@ -28,7 +28,7 @@ Output lands in `EventsApp\bin\Debug\` or `EventsApp\bin\Release\`. There are no
 - **Models** (`Model/`) are plain POCOs — no `INotifyPropertyChanged`, no logic.
 - **ViewModels** (`ViewModel/`) — page ViewModels implement `INotifyPropertyChanged` directly. Add/Edit form ViewModels inherit from `ViewModelBase` (abstract, implements both `INotifyPropertyChanged` + `INotifyDataErrorInfo`). Each page ViewModel owns a flat DTO (row-item class defined in the same file) used as the `ItemsSource` type.
 - **Views** (`View/`) are WPF `Page` classes for the main pages (not `UserControl`). Popup forms are `Window` classes. DataContext is always set in the code-behind constructor, not via XAML.
-- The ViewModelLocator exists in `VML/ViewModelLocator.cs` but is **not actively used**.
+- No ViewModelLocator — the `VML/ViewModelLocator.cs` file was deleted as it was never referenced anywhere.
 
 ### Navigation — code-behind content-swapping (no NavigationService)
 `MainWindow` has two content areas that swap visibility:
@@ -109,7 +109,7 @@ Each page ViewModel also owns a `SearchState` property (a `SearchXxxViewModel` i
 ### Icon picker lists
 - **AddEventViewModel / EditEventViewModel**: `(None)`, Film, Music, Tennis, Basketball, Art — 6 items. `(None)` → `IconPath = null`; EventType icon is used as the fallback on the map/list.
 - **AddEventTypeViewModel / EditEventTypeViewModel**: `(None)`, Event type, Film, Music, Tennis, Basketball, Art — 7 items. Icon is required (used as fallback for events of this type).
-- Color picker (**AddTagViewModel / EditTagViewModel**): 7 named colors — Green `#4CAF50`, Blue `#2196F3`, Amber `#FF9800`, Red `#F44336`, Purple `#9C27B0`, Teal `#009688`, Indigo `#3F51B5`.
+- Color picker (**AddTagViewModel**): `(Select color)` (Hex=null, required-field sentinel) + 7 named colors — Green `#4CAF50`, Blue `#2196F3`, Amber `#FF9800`, Red `#F44336`, Purple `#9C27B0`, Teal `#009688`, Indigo `#3F51B5`. Color is a required field; validation checks `Hex ≠ null`. **EditTagViewModel** does not have the "(Select color)" sentinel — it always pre-selects the saved color.
 
 ---
 
@@ -152,16 +152,19 @@ EventsApp/
 │   ├── ViewModelBase.cs             ← abstract; INotifyPropertyChanged + INotifyDataErrorInfo;
 │   │                                   _errors dict; SetProperty<T>; SetErrors/ClearErrors;
 │   │                                   ValidateProperty (virtual); ValidateAllProperties (public)
-│   ├── AddEventViewModel.cs         ← EventTypeComboItem, AttendanceComboItem, TagCheckItem,
-│   │                                   HistoryDateItem, IconComboItem DTOs (shared with Edit)
+│   ├── AddEventViewModel.cs         ← EventTypeComboItem, AttendanceComboItem (has IsNone flag),
+│   │                                   TagCheckItem, HistoryDateItem, IconComboItem DTOs (shared with Edit)
 │   │                                   AddEventViewModel : ViewModelBase; validates EventIdText
 │   │                                   (required + positive int), Name (required), SelectedEventType
-│   │                                   (required, Id≠0); computed *HasError / *Error string props;
+│   │                                   (required, Id≠0), SelectedAttendance (required, IsNone=false),
+│   │                                   AverageCostText (empty OK / must be 0 or greater if filled);
+│   │                                   computed *HasError / *Error string props;
 │   │                                   SetEventIdError(msg) for duplicate check from code-behind
 │   ├── AddEventTypeViewModel.cs     ← AddEventTypeViewModel : ViewModelBase; validates IdText,
 │   │                                   Name, SelectedIcon (FilePath ≠ null); SetIdError(msg)
 │   ├── AddTagViewModel.cs           ← ColorComboItem (DTO), AddTagViewModel : ViewModelBase;
-│   │                                   validates IdText; SetIdError(msg)
+│   │                                   validates IdText (required + positive int),
+│   │                                   SelectedColor (required, Hex ≠ null); SetIdError(msg)
 │   ├── EditEventViewModel.cs        ← EditEventViewModel; OriginalId; pre-populates all fields
 │   ├── EditEventTypeViewModel.cs    ← EditEventTypeViewModel; OriginalId
 │   ├── EditTagViewModel.cs          ← EditTagViewModel; OriginalId
@@ -183,18 +186,16 @@ EventsApp/
 │   ├── TagDetailWindow.xaml / .cs       ← 380×340 modal
 │   ├── DeleteConfirmWindow.xaml / .cs   ← 380×200 shared Yes/No; ctor takes message string
 │   ├── AddEventWindow.xaml / .cs        ← 680×690; two-column form; DatePicker with TouchCalendar
-│   │                                       style; "!" + error text indicators for ID/Name/EventType
+│   │                                       style; "!" + error text indicators for ID/Name/EventType/
+│   │                                       Attendance/AvgCost
 │   ├── AddEventTypeWindow.xaml / .cs    ← 460×500; single-column; indicators for Icon/ID/Name
-│   ├── AddTagWindow.xaml / .cs          ← 460×420; single-column; indicator for ID
+│   ├── AddTagWindow.xaml / .cs          ← 460×420; single-column; indicators for ID/Color
 │   ├── EditEventWindow.xaml / .cs       ← 680×690; pre-populated; preserves MapX/MapY
 │   ├── EditEventTypeWindow.xaml / .cs   ← 460×460; pre-populated
 │   ├── EditTagWindow.xaml / .cs         ← 460×400; pre-populated
 │   ├── SearchEventWindow.xaml / .cs     ← 580×500; two-column; AND search; persistent state
 │   ├── SearchEventTypeWindow.xaml / .cs ← 420×360; single-column; Name + Description
 │   └── SearchTagWindow.xaml / .cs       ← 420×360; single-column; Color (exact) + Description
-│
-├── VML/
-│   └── ViewModelLocator.cs      ← AutoHookedUpViewModel attached property (defined but not used)
 │
 ├── Services/
 │   └── EventService.cs          ← LoadEvents(), LoadEventTypes(), LoadTags()
@@ -234,7 +235,7 @@ EventsApp/
 
 ### Events Page (`EventsView.xaml`)
 - DataGrid: Icon, ID, Name, Type, Location, Actions (Info/Edit/Delete).
-- **Add**: opens `AddEventWindow`; validates ID (positive int, unique) + Name + EventType; saves to JSON, adds row to DataGrid.
+- **Add**: opens `AddEventWindow`; validates ID (positive int, unique) + Name + EventType + Attendance (required) + AvgCost (must be 0 or greater if filled); saves to JSON, adds row to DataGrid.
 - **Edit**: opens `EditEventWindow` pre-populated; validates same rules excluding self; preserves MapX/MapY; updates JSON + DataGrid row in-place.
 - **Info**: opens `EventDetailWindow` as modal.
 - **Delete**: confirms via `DeleteConfirmWindow`; removes from JSON + DataGrid.
@@ -253,7 +254,7 @@ EventsApp/
 ### Tags Page (`TagsView.xaml`)
 - DataGrid: ID (`Code`), Color (`"Name (Hex)"` display), Actions.
 - Note: Tag `Description` is loaded but **not shown** in the DataGrid.
-- **Add**: `AddTagWindow`; validates ID (required, positive int, unique).
+- **Add**: `AddTagWindow`; validates ID (required, positive int, unique) + Color (required, Hex ≠ null).
 - **Edit**: `EditTagWindow`; same excluding self.
 - **Info**: `TagDetailWindow`.
 - **Delete**: `DeleteConfirmWindow` → removes from JSON + DataGrid.
@@ -271,6 +272,13 @@ EventsApp/
 
 ### Add Windows — validation approach
 All three Add ViewModels inherit `ViewModelBase` and override `ValidateProperty`. On "Add" click, the code-behind calls `vm.ValidateAllProperties()` — if `vm.HasErrors` is true, the save is blocked and error indicators appear inline. Real-time feedback also fires as the user edits fields (via `SetProperty<T>` → `ValidateProperty`).
+
+**Validated fields per window:**
+- `AddEventWindow`: EventIdText (required + positive int), Name (required), SelectedEventType (required, Id≠0), SelectedAttendance (required, IsNone=false), AverageCostText (empty=OK; if filled must be a valid number ≥ 0)
+- `AddEventTypeWindow`: IdText (required + positive int), Name (required), SelectedIcon (required, FilePath≠null)
+- `AddTagWindow`: IdText (required + positive int), SelectedColor (required, Hex≠null)
+
+**"None" sentinel items**: `AttendanceItems[0]` is `{DisplayName="(Select attendance)", IsNone=true}` — the `IsNone` flag on `AttendanceComboItem` is checked in validation. `ColorItems[0]` is `{DisplayName="(Select color)", Hex=null}` — `Hex==null` is the sentinel. Both start selected by default. EditEventViewModel has its own `AttendanceItems` list without the sentinel, so Edit is unaffected.
 
 **Error display**: each validated field has a sibling `StackPanel` beneath it (Visibility bound to `XxxHasError` via `BoolToVis` converter from `App.xaml`). It shows `"! "` (bold) + `{Binding XxxError}` (first error string). No red borders, no color-only indicators. `ValidatesOnNotifyDataErrors=False` is set on validated bindings to suppress WPF's built-in red-border mechanism.
 

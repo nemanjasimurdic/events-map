@@ -198,7 +198,7 @@
     </Compile>
     <Compile Include="Converters\PercentageToPieSliceConverter.cs" />
     <Compile Include="Services\EventService.cs" />
-    <Compile Include="VML\ViewModelLocator.cs" />
+
     <Compile Include="ViewModel\EditEventViewModel.cs" />
     <Compile Include="ViewModel\EditEventTypeViewModel.cs" />
     <Compile Include="ViewModel\EditTagViewModel.cs" />

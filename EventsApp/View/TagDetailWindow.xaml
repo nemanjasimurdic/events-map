@@ -16,7 +16,6 @@
             <RowDefinition Height="52"/>
         </Grid.RowDefinitions>
 
-        <!-- ── HEADER ── -->
         <StackPanel Grid.Row="0" Orientation="Horizontal"
                     VerticalAlignment="Center" Margin="16,0">
             <Image Source="/Resources/Images/back.png"
@@ -27,28 +26,22 @@
 
         <Rectangle Grid.Row="1" Fill="#E0E0E0"/>
 
-        <!-- ── CONTENT ── -->
         <ScrollViewer Grid.Row="2" VerticalScrollBarVisibility="Disabled">
             <StackPanel Margin="24,20,24,20">
 
-                <!-- Generic tag icon (visual identity indicator) -->
                 <Image Source="/Resources/Images/tag.png"
                        Width="40" Height="40" Stretch="Uniform"
                        HorizontalAlignment="Left"/>
 
-                <!-- Description as primary heading (it IS the tag's label) -->
                 <TextBlock Text="{Binding Description}"
                            FontSize="16" FontWeight="Bold"
                            TextWrapping="Wrap" Margin="0,12,0,0"/>
 
-                <!-- ID (muted sub-heading) -->
                 <TextBlock Text="{Binding Code, StringFormat='Tag \#{0}'}"
                            FontSize="11" Foreground="#888888" Margin="0,4,0,0"/>
 
-                <!-- Thin rule -->
                 <Rectangle Height="1" Fill="#E8E8E8" Margin="0,14,0,14"/>
 
-                <!-- Color (name + hex, color-blind-friendly) -->
                 <StackPanel Orientation="Horizontal">
                     <Image Source="/Resources/Images/tag.png"
                            Width="13" Height="13" VerticalAlignment="Center"/>
@@ -61,7 +54,6 @@
 
         <Rectangle Grid.Row="3" Fill="#E0E0E0"/>
 
-        <!-- ── FOOTER ── -->
         <Grid Grid.Row="4">
             <Button HorizontalAlignment="Right" VerticalAlignment="Center"
                     Margin="0,0,16,0" Padding="12,6"

@@ -15,7 +15,6 @@ namespace EventsApp.ViewModel
 
         public int OriginalId { get; }
 
-        // ── Form fields ──────────────────────────────────────────────────────
 
         private string _eventIdText = "";
         public string EventIdText
@@ -108,7 +107,6 @@ namespace EventsApp.ViewModel
 
         public string IconPreviewPath => _selectedIcon?.PreviewPath;
 
-        // ── Validation flags ─────────────────────────────────────────────────
 
         private bool _eventIdHasError;
         public bool EventIdHasError
@@ -131,7 +129,6 @@ namespace EventsApp.ViewModel
             set { _eventTypeHasError = value; Notify(nameof(EventTypeHasError)); }
         }
 
-        // ── Collections ──────────────────────────────────────────────────────
 
         public ObservableCollection<EventTypeComboItem> EventTypeItems { get; }
             = new ObservableCollection<EventTypeComboItem>();
@@ -153,7 +150,6 @@ namespace EventsApp.ViewModel
 
         public List<IconComboItem> IconItems { get; }
 
-        // ── Constructor ──────────────────────────────────────────────────────
 
         public EditEventViewModel(Event ev, List<EventType> eventTypes, List<Tag> tags)
         {
@@ -196,7 +192,6 @@ namespace EventsApp.ViewModel
                 HistoryDates.Add(new HistoryDateItem { Date = d });
         }
 
-        // ── Methods ──────────────────────────────────────────────────────────
 
         public void AddPastDate()
         {

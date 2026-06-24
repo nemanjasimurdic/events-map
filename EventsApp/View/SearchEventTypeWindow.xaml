@@ -16,7 +16,6 @@
             <RowDefinition Height="52"/>
         </Grid.RowDefinitions>
 
-        <!-- ── HEADER ── -->
         <StackPanel Grid.Row="0" Orientation="Horizontal"
                     VerticalAlignment="Center" Margin="16,0">
             <Image Source="/Resources/Images/back.png"
@@ -27,16 +26,13 @@
 
         <Rectangle Grid.Row="1" Fill="#E0E0E0"/>
 
-        <!-- ── FORM BODY ── -->
         <StackPanel Grid.Row="2" Margin="16,20,16,20">
 
-            <!-- Name -->
             <TextBlock Text="Name:" FontSize="12" FontWeight="SemiBold"
                        Margin="0,0,0,3"/>
             <TextBox Text="{Binding Name, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                      Padding="5,4" FontSize="12" Margin="0,0,0,10"/>
 
-            <!-- Description -->
             <TextBlock Text="Description:" FontSize="12" FontWeight="SemiBold"
                        Margin="0,0,0,3"/>
             <TextBox Text="{Binding Description, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
@@ -49,7 +45,6 @@
 
         <Rectangle Grid.Row="3" Fill="#E0E0E0"/>
 
-        <!-- ── FOOTER ── -->
         <StackPanel Grid.Row="4" Orientation="Horizontal"
                     HorizontalAlignment="Right" VerticalAlignment="Center"
                     Margin="0,0,16,0">

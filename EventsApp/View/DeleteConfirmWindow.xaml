@@ -8,7 +8,6 @@
         ShowInTaskbar="False">
 
     <Grid>
-        <!-- Text: 30px from the top, left, and right of the window -->
         <TextBlock x:Name="MessageText"
                    Margin="24,20,24,0"
                    FontSize="20"
@@ -16,7 +15,6 @@
                    TextWrapping="Wrap"
                    VerticalAlignment="Top"/>
 
-        <!-- Button pair: centered at the bottom of the window -->
         <StackPanel Orientation="Horizontal"
                     VerticalAlignment="Bottom" HorizontalAlignment="Center"
                     Margin="0,0,0,20">
