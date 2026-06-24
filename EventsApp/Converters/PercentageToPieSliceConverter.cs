@@ -18,7 +18,6 @@ namespace EventsApp.Converters
             if (pct <= 0) return Geometry.Empty;
             if (pct >= 1) return new EllipseGeometry(new Point(Cx, Cy), Radius, Radius);
 
-            // Arc from 12-o'clock position, clockwise by pct * 360 degrees
             double angle = pct * 2 * Math.PI;
             double endX  = Cx + Radius * Math.Sin(angle);
             double endY  = Cy - Radius * Math.Cos(angle);

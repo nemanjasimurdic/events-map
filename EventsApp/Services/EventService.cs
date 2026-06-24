@@ -8,16 +8,8 @@ namespace EventsApp.Services
 {
     public class EventService
     {
-        // In Debug the binary is in bin\Debug\, so walk up two levels to reach the project's
-        // Data\ folder. This ensures saves survive a VS rebuild (PreserveNewest would otherwise
-        // overwrite bin\Debug\Data\ with the original source on the next F5).
-#if DEBUG
         private static readonly string DataDir =
-            Path.GetFullPath(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "..", "..", "Data"));
-#else
-        private static readonly string DataDir =
-            Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Data");
-#endif
+        Path.GetFullPath(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "..", "..", "Data"));
         private static readonly string EventsPath = Path.Combine(DataDir, "events.json");
         private static readonly string TypesPath  = Path.Combine(DataDir, "eventTypes.json");
         private static readonly string TagsPath   = Path.Combine(DataDir, "tags.json");

@@ -36,7 +36,7 @@ namespace EventsApp.ViewModel
             var events     = service.LoadEvents();
             var eventTypes = service.LoadEventTypes();
 
-            // ── Events per type ──────────────────────────────────────────
+            // events per type
             var typeLookup = eventTypes.ToDictionary(t => t.Id, t => t.Name);
             var byType = events
                 .GroupBy(e => e.EventTypeId)
@@ -58,7 +58,7 @@ namespace EventsApp.ViewModel
                     BarWidth = (x.Count / (double)maxType) * MaxBarWidth
                 }));
 
-            // ── Event purpose (humanitarian pie) ────────────────────────
+            // event purpose
             HumanitarianCount    = events.Count(e => e.IsHumanitarian);
             NonHumanitarianCount = events.Count - HumanitarianCount;
             HumanitarianPercent  = events.Count > 0
@@ -69,7 +69,7 @@ namespace EventsApp.ViewModel
             HumanitarianLabel    = $"Humanitarian — {HumanitarianCount} ({HumanitarianPercent:P0})";
             NonHumanitarianLabel = $"Standard — {NonHumanitarianCount} ({nonPct:P0})";
 
-            // ── Events by attendance ──────────────────────────────────────
+            // events by attendance
             var attendanceLabels = new Dictionary<AttendanceRange, string>
             {
                 { AttendanceRange.Upto1000,        "Up to 1,000"     },

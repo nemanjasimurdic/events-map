@@ -18,6 +18,7 @@ namespace EventsApp.ViewModel
     {
         public AttendanceRange Value       { get; set; }
         public string          DisplayName { get; set; }
+        public bool            IsNone      { get; set; }
     }
 
     public class TagCheckItem : INotifyPropertyChanged
@@ -51,89 +52,85 @@ namespace EventsApp.ViewModel
         public string PreviewPath { get; set; }
     }
 
-    public class AddEventViewModel : INotifyPropertyChanged
+    public class AddEventViewModel : ViewModelBase
     {
-        public event PropertyChangedEventHandler PropertyChanged;
-        private void Notify(string prop) =>
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(prop));
-
         // ── Form fields ──────────────────────────────────────────────────────
 
         private string _eventIdText = "";
         public string EventIdText
         {
             get => _eventIdText;
-            set { _eventIdText = value ?? ""; Notify(nameof(EventIdText)); }
+            set => SetProperty(ref _eventIdText, value ?? "");
         }
 
         private string _name = "";
         public string Name
         {
             get => _name;
-            set { _name = value ?? ""; Notify(nameof(Name)); }
+            set => SetProperty(ref _name, value ?? "");
         }
 
         private string _description = "";
         public string Description
         {
             get => _description;
-            set { _description = value ?? ""; Notify(nameof(Description)); }
+            set => SetProperty(ref _description, value ?? "");
         }
 
         private EventTypeComboItem _selectedEventType;
         public EventTypeComboItem SelectedEventType
         {
             get => _selectedEventType;
-            set { _selectedEventType = value; Notify(nameof(SelectedEventType)); }
+            set => SetProperty(ref _selectedEventType, value);
         }
 
         private AttendanceComboItem _selectedAttendance;
         public AttendanceComboItem SelectedAttendance
         {
             get => _selectedAttendance;
-            set { _selectedAttendance = value; Notify(nameof(SelectedAttendance)); }
+            set => SetProperty(ref _selectedAttendance, value);
         }
 
         private string _avgCostText = "0";
         public string AverageCostText
         {
             get => _avgCostText;
-            set { _avgCostText = value ?? "0"; Notify(nameof(AverageCostText)); }
+            set => SetProperty(ref _avgCostText, value ?? "0");
         }
 
         private string _country = "";
         public string Country
         {
             get => _country;
-            set { _country = value ?? ""; Notify(nameof(Country)); }
+            set => SetProperty(ref _country, value ?? "");
         }
 
         private string _city = "";
         public string City
         {
             get => _city;
-            set { _city = value ?? ""; Notify(nameof(City)); }
+            set => SetProperty(ref _city, value ?? "");
         }
 
         private DateTime? _currentYearDate;
         public DateTime? CurrentYearDate
         {
             get => _currentYearDate;
-            set { _currentYearDate = value; Notify(nameof(CurrentYearDate)); }
+            set => SetProperty(ref _currentYearDate, value);
         }
 
         private DateTime? _pastDateToAdd;
         public DateTime? PastDateToAdd
         {
             get => _pastDateToAdd;
-            set { _pastDateToAdd = value; Notify(nameof(PastDateToAdd)); }
+            set => SetProperty(ref _pastDateToAdd, value);
         }
 
         private bool _isHumanitarian;
         public bool IsHumanitarian
         {
             get => _isHumanitarian;
-            set { _isHumanitarian = value; Notify(nameof(IsHumanitarian)); }
+            set => SetProperty(ref _isHumanitarian, value);
         }
 
         private IconComboItem _selectedIcon;
@@ -142,35 +139,83 @@ namespace EventsApp.ViewModel
             get => _selectedIcon;
             set
             {
-                _selectedIcon = value;
-                Notify(nameof(SelectedIcon));
-                Notify(nameof(IconPreviewPath));
+                if (SetProperty(ref _selectedIcon, value))
+                    OnPropertyChanged(nameof(IconPreviewPath));
             }
         }
 
         public string IconPreviewPath => _selectedIcon?.PreviewPath;
 
-        // ── Validation flags ─────────────────────────────────────────────────
+        // ── Validation helpers ───────────────────────────────────────────────
 
-        private bool _eventIdHasError;
-        public bool EventIdHasError
-        {
-            get => _eventIdHasError;
-            set { _eventIdHasError = value; Notify(nameof(EventIdHasError)); }
-        }
+        public bool EventIdHasError  => GetErrors(nameof(EventIdText)).Cast<string>().Any();
+        public bool NameHasError     => GetErrors(nameof(Name)).Cast<string>().Any();
+        public bool EventTypeHasError => GetErrors(nameof(SelectedEventType)).Cast<string>().Any();
 
-        private bool _nameHasError;
-        public bool NameHasError
-        {
-            get => _nameHasError;
-            set { _nameHasError = value; Notify(nameof(NameHasError)); }
-        }
+        public string EventIdError    => GetErrors(nameof(EventIdText)).Cast<string>().FirstOrDefault() ?? "";
+        public string NameError       => GetErrors(nameof(Name)).Cast<string>().FirstOrDefault() ?? "";
+        public string EventTypeError  => GetErrors(nameof(SelectedEventType)).Cast<string>().FirstOrDefault() ?? "";
 
-        private bool _eventTypeHasError;
-        public bool EventTypeHasError
+        public bool   AttendanceHasError => GetErrors(nameof(SelectedAttendance)).Cast<string>().Any();
+        public string AttendanceError    => GetErrors(nameof(SelectedAttendance)).Cast<string>().FirstOrDefault() ?? "";
+
+        public bool   AvgCostHasError    => GetErrors(nameof(AverageCostText)).Cast<string>().Any();
+        public string AvgCostError       => GetErrors(nameof(AverageCostText)).Cast<string>().FirstOrDefault() ?? "";
+
+        public void SetEventIdError(string message) => SetErrors(nameof(EventIdText), new[] { message });
+
+        // ── Validation logic ─────────────────────────────────────────────────
+
+        protected override void ValidateProperty(object value, string propertyName)
         {
-            get => _eventTypeHasError;
-            set { _eventTypeHasError = value; Notify(nameof(EventTypeHasError)); }
+            switch (propertyName)
+            {
+                case nameof(EventIdText):
+                    var idText = value as string ?? "";
+                    if (string.IsNullOrWhiteSpace(idText))
+                        SetErrors(propertyName, new[] { "Required field" });
+                    else if (!int.TryParse(idText.Trim(), out int parsed) || parsed <= 0)
+                        SetErrors(propertyName, new[] { "Must be a positive number" });
+                    else
+                        ClearErrors(propertyName);
+                    break;
+
+                case nameof(Name):
+                    var name = value as string ?? "";
+                    if (string.IsNullOrWhiteSpace(name))
+                        SetErrors(propertyName, new[] { "Required field" });
+                    else
+                        ClearErrors(propertyName);
+                    break;
+
+                case nameof(SelectedEventType):
+                    var et = value as EventTypeComboItem;
+                    if (et == null || et.Id == 0)
+                        SetErrors(propertyName, new[] { "Required field" });
+                    else
+                        ClearErrors(propertyName);
+                    break;
+
+                case nameof(SelectedAttendance):
+                    var att = value as AttendanceComboItem;
+                    if (att == null || att.IsNone)
+                        SetErrors(propertyName, new[] { "Required field" });
+                    else
+                        ClearErrors(propertyName);
+                    break;
+
+                case nameof(AverageCostText):
+                    var costText = value as string ?? "";
+                    if (string.IsNullOrWhiteSpace(costText))
+                        ClearErrors(propertyName);
+                    else if (!double.TryParse(costText.Trim(), out double cost))
+                        SetErrors(propertyName, new[] { "Must be a valid number" });
+                    else if (cost < 0)
+                        SetErrors(propertyName, new[] { "Must be 0 or greater" });
+                    else
+                        ClearErrors(propertyName);
+                    break;
+            }
         }
 
         // ── Collections ──────────────────────────────────────────────────────
@@ -181,6 +226,7 @@ namespace EventsApp.ViewModel
         public List<AttendanceComboItem> AttendanceItems { get; }
             = new List<AttendanceComboItem>
             {
+                new AttendanceComboItem { DisplayName = "(Select attendance)", IsNone = true                                           },
                 new AttendanceComboItem { Value = AttendanceRange.Upto1000,        DisplayName = "Up to 1,000"    },
                 new AttendanceComboItem { Value = AttendanceRange.From1000To5000,  DisplayName = "1,000 – 5,000"  },
                 new AttendanceComboItem { Value = AttendanceRange.From5000To10000, DisplayName = "5,000 – 10,000" },
@@ -195,7 +241,6 @@ namespace EventsApp.ViewModel
 
         public List<IconComboItem> IconItems { get; }
 
-        // ── Constructor ──────────────────────────────────────────────────────
 
         public AddEventViewModel()
         {
@@ -206,23 +251,52 @@ namespace EventsApp.ViewModel
             EventTypeItems.Add(new EventTypeComboItem { Id = 0, Name = "(Select type)" });
             foreach (var t in svc.LoadEventTypes())
                 EventTypeItems.Add(new EventTypeComboItem { Id = t.Id, Name = t.Name });
-            SelectedEventType = EventTypeItems[0];
+            _selectedEventType = EventTypeItems[0];
 
             foreach (var t in svc.LoadTags())
                 Tags.Add(new TagCheckItem { Id = t.Id, DisplayName = t.Description, IsSelected = false });
 
-            SelectedAttendance = AttendanceItems[0];
+            _selectedAttendance = AttendanceItems[0];
 
             IconItems = new List<IconComboItem>
             {
-                new IconComboItem { DisplayName = "(None)",    FilePath = null,                                PreviewPath = null },
-                new IconComboItem { DisplayName = "Film",      FilePath = "Resources/Images/film.png",         PreviewPath = pack + "Resources/Images/film.png" },
-                new IconComboItem { DisplayName = "Music",     FilePath = "Resources/Images/music.png",        PreviewPath = pack + "Resources/Images/music.png" },
-                new IconComboItem { DisplayName = "Tennis",    FilePath = "Resources/Images/tennis.png",       PreviewPath = pack + "Resources/Images/tennis.png" },
-                new IconComboItem { DisplayName = "Basketball",FilePath = "Resources/Images/basketball.png",   PreviewPath = pack + "Resources/Images/basketball.png" },
-                new IconComboItem { DisplayName = "Art",       FilePath = "Resources/Images/art.png",          PreviewPath = pack + "Resources/Images/art.png" },
+                new IconComboItem { DisplayName = "(None)",     FilePath = null,                                PreviewPath = null },
+                new IconComboItem { DisplayName = "Film",       FilePath = "Resources/Images/film.png",         PreviewPath = pack + "Resources/Images/film.png" },
+                new IconComboItem { DisplayName = "Music",      FilePath = "Resources/Images/music.png",        PreviewPath = pack + "Resources/Images/music.png" },
+                new IconComboItem { DisplayName = "Tennis",     FilePath = "Resources/Images/tennis.png",       PreviewPath = pack + "Resources/Images/tennis.png" },
+                new IconComboItem { DisplayName = "Basketball", FilePath = "Resources/Images/basketball.png",   PreviewPath = pack + "Resources/Images/basketball.png" },
+                new IconComboItem { DisplayName = "Art",        FilePath = "Resources/Images/art.png",          PreviewPath = pack + "Resources/Images/art.png" },
             };
-            SelectedIcon = IconItems[0];
+            _selectedIcon = IconItems[0];
+
+            ErrorsChanged += (s, e) =>
+            {
+                if (e.PropertyName == nameof(EventIdText))
+                {
+                    OnPropertyChanged(nameof(EventIdHasError));
+                    OnPropertyChanged(nameof(EventIdError));
+                }
+                else if (e.PropertyName == nameof(Name))
+                {
+                    OnPropertyChanged(nameof(NameHasError));
+                    OnPropertyChanged(nameof(NameError));
+                }
+                else if (e.PropertyName == nameof(SelectedEventType))
+                {
+                    OnPropertyChanged(nameof(EventTypeHasError));
+                    OnPropertyChanged(nameof(EventTypeError));
+                }
+                else if (e.PropertyName == nameof(SelectedAttendance))
+                {
+                    OnPropertyChanged(nameof(AttendanceHasError));
+                    OnPropertyChanged(nameof(AttendanceError));
+                }
+                else if (e.PropertyName == nameof(AverageCostText))
+                {
+                    OnPropertyChanged(nameof(AvgCostHasError));
+                    OnPropertyChanged(nameof(AvgCostError));
+                }
+            };
         }
 
         // ── Methods ──────────────────────────────────────────────────────────

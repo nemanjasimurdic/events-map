@@ -36,7 +36,6 @@
 
     <Grid Background="White">
 
-        <!-- Three charts, centred in the page -->
         <Grid HorizontalAlignment="Center" VerticalAlignment="Center">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="Auto"/>
@@ -46,7 +45,7 @@
                 <ColumnDefinition Width="Auto"/>
             </Grid.ColumnDefinitions>
 
-            <!-- ── Chart 1: Events per Type (horizontal bar) ── -->
+            <!-- events per type -->
             <Border Grid.Column="0" Width="320" BorderBrush="#CCCCCC" BorderThickness="1"
                     CornerRadius="6" Padding="16">
                 <StackPanel>
@@ -77,26 +76,23 @@
                 </StackPanel>
             </Border>
 
-            <!-- ── Chart 2: Event Purpose (pie) ── -->
+            <!-- event purpose -->
             <Border Grid.Column="2" Width="230" BorderBrush="#CCCCCC" BorderThickness="1"
                     CornerRadius="6" Padding="16">
                 <StackPanel HorizontalAlignment="Center">
                     <TextBlock Text="Event Purpose" FontSize="13" FontWeight="SemiBold"
                                HorizontalAlignment="Center" Margin="0,0,0,14"/>
 
-                    <!-- Canvas 160×160, centre (80,80), radius 70 -->
                     <Canvas Width="160" Height="160" HorizontalAlignment="Center">
-                        <!-- Hatched background = standard events -->
                         <Ellipse Canvas.Left="10" Canvas.Top="10"
                                  Width="140" Height="140"
                                  Fill="{StaticResource HatchBrush}"/>
-                        <!-- Solid dark slice = humanitarian events -->
                         <Path Fill="#333333" Stroke="White" StrokeThickness="1.5"
                               Data="{Binding HumanitarianPercent,
                                              Converter={StaticResource PieConverter}}"/>
                     </Canvas>
 
-                    <!-- Legend: shape pattern matches the segment fill -->
+                    <!-- legend -->
                     <StackPanel Margin="0,12,0,0">
                         <StackPanel Orientation="Horizontal" Margin="0,3">
                             <Rectangle Width="12" Height="12" Fill="#333333"
@@ -115,7 +111,7 @@
                 </StackPanel>
             </Border>
 
-            <!-- ── Chart 3: Events by Attendance (horizontal bar) ── -->
+            <!-- events by attendance -->
             <Border Grid.Column="4" Width="320" BorderBrush="#CCCCCC" BorderThickness="1"
                     CornerRadius="6" Padding="16">
                 <StackPanel>

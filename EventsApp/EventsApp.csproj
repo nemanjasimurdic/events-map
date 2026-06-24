@@ -205,6 +205,7 @@
     <Compile Include="ViewModel\SearchEventViewModel.cs" />
     <Compile Include="ViewModel\SearchEventTypeViewModel.cs" />
     <Compile Include="ViewModel\SearchTagViewModel.cs" />
+    <Compile Include="ViewModel\ViewModelBase.cs" />
     <Compile Include="ViewModel\AddEventViewModel.cs" />
     <Compile Include="ViewModel\AddEventTypeViewModel.cs" />
     <Compile Include="ViewModel\AddTagViewModel.cs" />

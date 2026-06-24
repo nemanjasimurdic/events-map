@@ -71,36 +71,30 @@
                 <!-- Event ID -->
                 <TextBlock Text="Event ID:" FontSize="12" FontWeight="SemiBold"
                            Margin="0,0,0,3"/>
-                <TextBox Text="{Binding EventIdText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                         Padding="5,4" FontSize="12" Margin="0,0,0,8">
-                    <TextBox.Style>
-                        <Style TargetType="TextBox">
-                            <Style.Triggers>
-                                <DataTrigger Binding="{Binding EventIdHasError}" Value="True">
-                                    <Setter Property="BorderBrush" Value="#E53935"/>
-                                    <Setter Property="BorderThickness" Value="1.5"/>
-                                </DataTrigger>
-                            </Style.Triggers>
-                        </Style>
-                    </TextBox.Style>
-                </TextBox>
+                <StackPanel Margin="0,0,0,8">
+                    <TextBox Text="{Binding EventIdText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, ValidatesOnNotifyDataErrors=False}"
+                             Padding="5,4" FontSize="12"/>
+                    <StackPanel Orientation="Horizontal"
+                                Visibility="{Binding EventIdHasError, Converter={StaticResource BoolToVis}}"
+                                Margin="0,3,0,0">
+                        <TextBlock Text="! " FontWeight="Bold" FontSize="11"/>
+                        <TextBlock Text="{Binding EventIdError}" FontSize="11"/>
+                    </StackPanel>
+                </StackPanel>
 
                 <!-- Name -->
                 <TextBlock Text="Name:" FontSize="12" FontWeight="SemiBold"
                            Margin="0,0,0,3"/>
-                <TextBox Text="{Binding Name, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                         Padding="5,4" FontSize="12" Margin="0,0,0,8">
-                    <TextBox.Style>
-                        <Style TargetType="TextBox">
-                            <Style.Triggers>
-                                <DataTrigger Binding="{Binding NameHasError}" Value="True">
-                                    <Setter Property="BorderBrush" Value="#E53935"/>
-                                    <Setter Property="BorderThickness" Value="1.5"/>
-                                </DataTrigger>
-                            </Style.Triggers>
-                        </Style>
-                    </TextBox.Style>
-                </TextBox>
+                <StackPanel Margin="0,0,0,8">
+                    <TextBox Text="{Binding Name, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, ValidatesOnNotifyDataErrors=False}"
+                             Padding="5,4" FontSize="12"/>
+                    <StackPanel Orientation="Horizontal"
+                                Visibility="{Binding NameHasError, Converter={StaticResource BoolToVis}}"
+                                Margin="0,3,0,0">
+                        <TextBlock Text="! " FontWeight="Bold" FontSize="11"/>
+                        <TextBlock Text="{Binding NameError}" FontSize="11"/>
+                    </StackPanel>
+                </StackPanel>
 
                 <!-- Description -->
                 <TextBlock Text="Description:" FontSize="12" FontWeight="SemiBold"
@@ -115,35 +109,48 @@
                 <!-- Event type name -->
                 <TextBlock Text="Event type name:" FontSize="12" FontWeight="SemiBold"
                            Margin="0,0,0,3"/>
-                <ComboBox ItemsSource="{Binding EventTypeItems}"
-                          SelectedItem="{Binding SelectedEventType, Mode=TwoWay}"
-                          DisplayMemberPath="Name"
-                          Padding="5,3" FontSize="12" Margin="0,0,0,8">
-                    <ComboBox.Style>
-                        <Style TargetType="ComboBox">
-                            <Style.Triggers>
-                                <DataTrigger Binding="{Binding EventTypeHasError}" Value="True">
-                                    <Setter Property="BorderBrush" Value="#E53935"/>
-                                    <Setter Property="BorderThickness" Value="1.5"/>
-                                </DataTrigger>
-                            </Style.Triggers>
-                        </Style>
-                    </ComboBox.Style>
-                </ComboBox>
+                <StackPanel Margin="0,0,0,8">
+                    <ComboBox ItemsSource="{Binding EventTypeItems}"
+                              SelectedItem="{Binding SelectedEventType, Mode=TwoWay, ValidatesOnNotifyDataErrors=False}"
+                              DisplayMemberPath="Name"
+                              Padding="5,3" FontSize="12"/>
+                    <StackPanel Orientation="Horizontal"
+                                Visibility="{Binding EventTypeHasError, Converter={StaticResource BoolToVis}}"
+                                Margin="0,3,0,0">
+                        <TextBlock Text="! " FontWeight="Bold" FontSize="11"/>
+                        <TextBlock Text="{Binding EventTypeError}" FontSize="11"/>
+                    </StackPanel>
+                </StackPanel>
 
                 <!-- Attendance -->
                 <TextBlock Text="Attendance:" FontSize="12" FontWeight="SemiBold"
                            Margin="0,0,0,3"/>
-                <ComboBox ItemsSource="{Binding AttendanceItems}"
-                          SelectedItem="{Binding SelectedAttendance, Mode=TwoWay}"
-                          DisplayMemberPath="DisplayName"
-                          Padding="5,3" FontSize="12" Margin="0,0,0,8"/>
+                <StackPanel Margin="0,0,0,8">
+                    <ComboBox ItemsSource="{Binding AttendanceItems}"
+                              SelectedItem="{Binding SelectedAttendance, Mode=TwoWay, ValidatesOnNotifyDataErrors=False}"
+                              DisplayMemberPath="DisplayName"
+                              Padding="5,3" FontSize="12"/>
+                    <StackPanel Orientation="Horizontal"
+                                Visibility="{Binding AttendanceHasError, Converter={StaticResource BoolToVis}}"
+                                Margin="0,3,0,0">
+                        <TextBlock Text="! " FontWeight="Bold" FontSize="11"/>
+                        <TextBlock Text="{Binding AttendanceError}" FontSize="11"/>
+                    </StackPanel>
+                </StackPanel>
 
                 <!-- AvgCost (USD) -->
                 <TextBlock Text="AvgCost (USD):" FontSize="12" FontWeight="SemiBold"
                            Margin="0,0,0,3"/>
-                <TextBox Text="{Binding AverageCostText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                         Padding="5,4" FontSize="12"/>
+                <StackPanel>
+                    <TextBox Text="{Binding AverageCostText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, ValidatesOnNotifyDataErrors=False}"
+                             Padding="5,4" FontSize="12"/>
+                    <StackPanel Orientation="Horizontal"
+                                Visibility="{Binding AvgCostHasError, Converter={StaticResource BoolToVis}}"
+                                Margin="0,3,0,0">
+                        <TextBlock Text="! " FontWeight="Bold" FontSize="11"/>
+                        <TextBlock Text="{Binding AvgCostError}" FontSize="11"/>
+                    </StackPanel>
+                </StackPanel>
 
             </StackPanel>
 

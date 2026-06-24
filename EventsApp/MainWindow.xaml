@@ -18,15 +18,14 @@
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
 
-        <!-- ── HEADER ── -->
+        
         <Grid Grid.Row="0">
-            <!-- Left cluster: hamburger + page title (shown only when on a page) -->
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Left"
                         VerticalAlignment="Center" Margin="15,0,0,0">
                 <Button x:Name="HamburgerButton" Click="HamburgerButton_Click"
                         Background="Transparent" BorderThickness="0"
                         Width="36" Height="36" Padding="6">
-                    <Image Source="/Resources/Images/hamburger-menu.png" Stretch="Uniform"/>
+                    <Image Source="/Resources/Images/hamburger-menu.png"/>
                 </Button>
                 <TextBlock x:Name="PageTitleText"
                            FontSize="16" FontWeight="SemiBold"
@@ -34,7 +33,6 @@
                            Visibility="Collapsed"/>
             </StackPanel>
 
-            <!-- Clicking the centered app title always returns to the map workspace -->
             <Button HorizontalAlignment="Center" VerticalAlignment="Center"
                     Background="Transparent" BorderThickness="0" Padding="0"
                     Click="EventMapTitle_Click">
@@ -42,7 +40,6 @@
             </Button>
         </Grid>
 
-        <!-- Hamburger popup at root level so it isn't clipped by the 60px header row -->
         <Popup x:Name="HamburgerPopup" Grid.Row="0"
                PlacementTarget="{Binding ElementName=HamburgerButton}"
                Placement="Bottom" StaysOpen="False">
@@ -84,7 +81,6 @@
             </Border>
         </Popup>
 
-        <!-- Marker info popup — PlacementTarget set in code when opening -->
         <Popup x:Name="MarkerInfoPopup" Grid.Row="2"
                Placement="Top" StaysOpen="False" AllowsTransparency="True">
             <Border Background="White" BorderBrush="#CCCCCC" BorderThickness="1"
@@ -121,17 +117,15 @@
 
         <Rectangle Grid.Row="1" Fill="Black"/>
 
-        <!-- ── MAIN CONTENT ── -->
+        
         <Grid Grid.Row="2">
 
-            <!-- Map Workspace: default view, visible on startup -->
             <Grid x:Name="MapWorkspace">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="280"/>
                     <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
 
-                <!-- LEFT COLUMN: scrollable events list -->
                 <Grid Grid.Column="0" Margin="20,10,0,20">
                     <Grid.RowDefinitions>
                         <RowDefinition Height="Auto"/>
@@ -141,7 +135,7 @@
                     <TextBlock Grid.Row="0" Text="Events" FontSize="15" FontWeight="Bold"
                                Margin="0,0,0,10"/>
 
-                    <Border Grid.Row="1" x:Name="ListBorder"
+                    <Border Grid.Row="1" x:Name="ListBorder" 
                             BorderBrush="Black" BorderThickness="1" Padding="10"
                             AllowDrop="True"
                             DragOver="ListBorder_DragOver"
@@ -199,14 +193,13 @@
                     </Border>
                 </Grid>
 
-                <!-- RIGHT COLUMN: filter row + map -->
+                
                 <Grid Grid.Column="1" Margin="20,10,20,20">
                     <Grid.RowDefinitions>
                         <RowDefinition Height="Auto"/>
                         <RowDefinition Height="*"/>
                     </Grid.RowDefinitions>
 
-                    <!-- FILTER ROW -->
                     <StackPanel Grid.Row="0" Orientation="Horizontal"
                                 Margin="0,0,0,10" VerticalAlignment="Center">
 
@@ -242,7 +235,7 @@
                         </Button>
                     </StackPanel>
 
-                    <!-- MAP AREA -->
+                    
                     <Grid Grid.Row="1">
                         <Image Source="/Resources/Images/world-map.png" Stretch="Uniform"/>
                         <Canvas x:Name="MapCanvas" Background="Transparent"
@@ -253,11 +246,10 @@
                 </Grid>
             </Grid>
 
-            <!-- Navigation frame: hidden by default, shown when a menu page is active -->
+            
             <Frame x:Name="MainFrame" NavigationUIVisibility="Hidden"
                    Visibility="Collapsed" Background="White"/>
 
-            <!-- Back button: floats at top-left of content area, shown only when on a page -->
             <Button x:Name="PageBackButton"
                     Background="Transparent" BorderThickness="0"
                     Width="36" Height="36" Padding="6"

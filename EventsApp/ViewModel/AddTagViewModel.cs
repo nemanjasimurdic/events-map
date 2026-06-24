@@ -1,5 +1,5 @@
 using System.Collections.Generic;
-using System.ComponentModel;
+using System.Linq;
 
 namespace EventsApp.ViewModel
 {
@@ -9,36 +9,71 @@ namespace EventsApp.ViewModel
         public string Hex         { get; set; }
     }
 
-    public class AddTagViewModel : INotifyPropertyChanged
+    public class AddTagViewModel : ViewModelBase
     {
-        public event PropertyChangedEventHandler PropertyChanged;
-        private void Notify(string prop) =>
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(prop));
-
         private string _idText = "";
         public string IdText
         {
             get => _idText;
-            set { _idText = value ?? ""; Notify(nameof(IdText)); }
+            set => SetProperty(ref _idText, value ?? "");
         }
 
         private string _description = "";
         public string Description
         {
             get => _description;
-            set { _description = value ?? ""; Notify(nameof(Description)); }
+            set => SetProperty(ref _description, value ?? "");
         }
 
         private ColorComboItem _selectedColor;
         public ColorComboItem SelectedColor
         {
             get => _selectedColor;
-            set { _selectedColor = value; Notify(nameof(SelectedColor)); }
+            set => SetProperty(ref _selectedColor, value);
         }
+
+        // ── Validation helpers ───────────────────────────────────────────────
+
+        public bool   IdHasError    => GetErrors(nameof(IdText)).Cast<string>().Any();
+        public bool   ColorHasError => GetErrors(nameof(SelectedColor)).Cast<string>().Any();
+
+        public string IdError       => GetErrors(nameof(IdText)).Cast<string>().FirstOrDefault() ?? "";
+        public string ColorError    => GetErrors(nameof(SelectedColor)).Cast<string>().FirstOrDefault() ?? "";
+
+        public void SetIdError(string message) => SetErrors(nameof(IdText), new[] { message });
+
+        // ── Validation logic ─────────────────────────────────────────────────
+
+        protected override void ValidateProperty(object value, string propertyName)
+        {
+            switch (propertyName)
+            {
+                case nameof(IdText):
+                    var idText = value as string ?? "";
+                    if (string.IsNullOrWhiteSpace(idText))
+                        SetErrors(propertyName, new[] { "Required field" });
+                    else if (!int.TryParse(idText.Trim(), out int parsed) || parsed <= 0)
+                        SetErrors(propertyName, new[] { "Must be a positive number" });
+                    else
+                        ClearErrors(propertyName);
+                    break;
+
+                case nameof(SelectedColor):
+                    var color = value as ColorComboItem;
+                    if (color == null || color.Hex == null)
+                        SetErrors(propertyName, new[] { "Required field" });
+                    else
+                        ClearErrors(propertyName);
+                    break;
+            }
+        }
+
+        // ── Collections ──────────────────────────────────────────────────────
 
         public List<ColorComboItem> ColorItems { get; } = new List<ColorComboItem>
         {
-            new ColorComboItem { DisplayName = "Green",  Hex = "#4CAF50" },
+            new ColorComboItem { DisplayName = "(Select color)", Hex = null     },
+            new ColorComboItem { DisplayName = "Green",          Hex = "#4CAF50" },
             new ColorComboItem { DisplayName = "Blue",   Hex = "#2196F3" },
             new ColorComboItem { DisplayName = "Amber",  Hex = "#FF9800" },
             new ColorComboItem { DisplayName = "Red",    Hex = "#F44336" },
@@ -47,9 +82,25 @@ namespace EventsApp.ViewModel
             new ColorComboItem { DisplayName = "Indigo", Hex = "#3F51B5" },
         };
 
+        // ── Constructor ──────────────────────────────────────────────────────
+
         public AddTagViewModel()
         {
-            SelectedColor = ColorItems[0];
+            _selectedColor = ColorItems[0];
+
+            ErrorsChanged += (s, e) =>
+            {
+                if (e.PropertyName == nameof(IdText))
+                {
+                    OnPropertyChanged(nameof(IdHasError));
+                    OnPropertyChanged(nameof(IdError));
+                }
+                else if (e.PropertyName == nameof(SelectedColor))
+                {
+                    OnPropertyChanged(nameof(ColorHasError));
+                    OnPropertyChanged(nameof(ColorError));
+                }
+            };
         }
     }
 }

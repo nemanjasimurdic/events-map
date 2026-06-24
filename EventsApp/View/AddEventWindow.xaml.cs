@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
@@ -22,27 +21,19 @@ namespace EventsApp.View
 
         private void AddButton_Click(object sender, RoutedEventArgs e)
         {
-            var vm    = (AddEventViewModel)DataContext;
-            bool valid = true;
+            var vm = (AddEventViewModel)DataContext;
+            vm.ValidateAllProperties();
+            if (vm.HasErrors) return;
 
-            // Validate Event ID: must be a positive integer and unique
-            int eventId;
-            bool idParsed = int.TryParse(vm.EventIdText.Trim(), out eventId) && eventId > 0;
+            int eventId = int.Parse(vm.EventIdText.Trim());
 
             var svc            = new EventService();
             var existingEvents = svc.LoadEvents();
-            bool idUnique      = idParsed && !existingEvents.Any(ev => ev.Id == eventId);
-
-            vm.EventIdHasError = !idParsed || !idUnique;
-            if (vm.EventIdHasError) valid = false;
-
-            vm.NameHasError = string.IsNullOrWhiteSpace(vm.Name);
-            if (vm.NameHasError) valid = false;
-
-            vm.EventTypeHasError = vm.SelectedEventType == null || vm.SelectedEventType.Id == 0;
-            if (vm.EventTypeHasError) valid = false;
-
-            if (!valid) return;
+            if (existingEvents.Any(ev => ev.Id == eventId))
+            {
+                vm.SetEventIdError("ID already exists");
+                return;
+            }
 
             double avgCost;
             if (!double.TryParse(vm.AverageCostText.Trim(), out avgCost) || avgCost < 0)
@@ -70,7 +61,6 @@ namespace EventsApp.View
             existingEvents.Add(newEvent);
             svc.SaveEvents(existingEvents);
 
-            // Resolve the icon path for the DataGrid row
             const string pack = "pack://application:,,,/EventsApp;component/";
             string rowIconPath;
             if (newEvent.IconPath != null)

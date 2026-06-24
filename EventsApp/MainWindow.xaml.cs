@@ -15,11 +15,11 @@ namespace EventsApp
     {
         private readonly MainWindowViewModel _vm;
 
-        // List → Map drag state
+        // list -> map
         private Point _listDragStart;
         private EventCardItem _pendingListDrag;
 
-        // Map → List drag state
+        // map -> list
         private readonly Dictionary<FrameworkElement, EventCardItem> _mapMarkers
             = new Dictionary<FrameworkElement, EventCardItem>();
         private FrameworkElement _markerBeingDragged;
@@ -40,11 +40,10 @@ namespace EventsApp
                     PlaceMarker(item, new Point(item.MapX.Value, item.MapY.Value));
         }
 
-        // ── Hamburger menu ─────────────────────────────────────────────────
 
         private void HamburgerButton_Click(object sender, RoutedEventArgs e)
         {
-            HamburgerPopup.IsOpen = !HamburgerPopup.IsOpen;
+            HamburgerPopup.IsOpen = true;
         }
 
         private void CloseHamburgerMenu(object sender, RoutedEventArgs e)
@@ -52,7 +51,6 @@ namespace EventsApp
             HamburgerPopup.IsOpen = false;
         }
 
-        // ── Navigation ────────────────────────────────────────────────────
 
         private void NavigateTo(Page page, string pageTitle)
         {
@@ -101,7 +99,7 @@ namespace EventsApp
             NavigateTo(new StatisticsPage(), "Statistics");
         }
 
-        // ── Drag initiation from list ──────────────────────────────────────
+        // drag from list
 
         private void ListBorder_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
@@ -131,7 +129,7 @@ namespace EventsApp
             }
         }
 
-        // ── Drop onto list (marker → list) ────────────────────────────────
+        // drop on list
 
         private void ListBorder_DragOver(object sender, DragEventArgs e)
         {
@@ -163,7 +161,7 @@ namespace EventsApp
             e.Handled = true;
         }
 
-        // ── Drop onto map (list → map) ────────────────────────────────────
+        // drop on the map
 
         private void MapCanvas_DragOver(object sender, DragEventArgs e)
         {
@@ -199,7 +197,7 @@ namespace EventsApp
             e.Handled = true;
         }
 
-        // ── Marker drag back to list ──────────────────────────────────────
+        // drag from map
 
         private void Marker_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
@@ -229,7 +227,6 @@ namespace EventsApp
 
         private void Marker_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
         {
-            // If _markerBeingDragged is still set, no drag was initiated — treat as a click
             if (_markerBeingDragged == null) return;
             var marker = _markerBeingDragged;
             var item   = _markerDragItem;
@@ -239,7 +236,6 @@ namespace EventsApp
             e.Handled = true;
         }
 
-        // ── Helpers ───────────────────────────────────────────────────────
 
         private EventCardItem GetCardUnderMouse(DependencyObject source)
         {
@@ -274,7 +270,6 @@ namespace EventsApp
         {
             var panel = new StackPanel { HorizontalAlignment = HorizontalAlignment.Center };
 
-            // Bind Visibility to IsVisibleOnMap so the map filter can hide/show this marker
             panel.SetBinding(UIElement.VisibilityProperty, new Binding(nameof(EventCardItem.IsVisibleOnMap))
             {
                 Source    = item,

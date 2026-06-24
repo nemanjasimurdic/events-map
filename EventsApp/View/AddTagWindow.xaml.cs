@@ -20,13 +20,18 @@ namespace EventsApp.View
         private void AddButton_Click(object sender, RoutedEventArgs e)
         {
             var vm = (AddTagViewModel)DataContext;
+            vm.ValidateAllProperties();
+            if (vm.HasErrors) return;
 
-            int id;
-            if (!int.TryParse(vm.IdText.Trim(), out id) || id <= 0) return;
+            int id = int.Parse(vm.IdText.Trim());
 
             var svc      = new EventService();
             var existing = svc.LoadTags();
-            if (existing.Any(t => t.Id == id)) return;
+            if (existing.Any(t => t.Id == id))
+            {
+                vm.SetIdError("ID already exists");
+                return;
+            }
 
             var newTag = new Tag
             {
