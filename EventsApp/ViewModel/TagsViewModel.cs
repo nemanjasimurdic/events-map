@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Windows.Data;
+using EventsApp.Models;
 using EventsApp.Services;
 
 namespace EventsApp.ViewModel
@@ -24,7 +25,9 @@ namespace EventsApp.ViewModel
                 { "#2196F3", "Blue"   },
                 { "#FF9800", "Amber"  },
                 { "#F44336", "Red"    },
-                { "#9C27B0", "Purple" }
+                { "#9C27B0", "Purple" },
+                { "#009688", "Teal"   },
+                { "#3F51B5", "Indigo" }
             };
 
         public ObservableCollection<TagRowItem> Tags { get; }
@@ -63,6 +66,18 @@ namespace EventsApp.ViewModel
         private bool Contains(string value) =>
             value != null &&
             value.IndexOf(_filterText, StringComparison.OrdinalIgnoreCase) >= 0;
+
+        public void AddRow(Tag tag)
+        {
+            string name = ColorNames.TryGetValue(tag.ColorHex, out var n) ? n : tag.ColorHex;
+            Tags.Add(new TagRowItem
+            {
+                Code         = tag.Id,
+                Description  = tag.Description,
+                ColorHex     = tag.ColorHex,
+                ColorDisplay = $"{name} ({tag.ColorHex})"
+            });
+        }
 
         private void Load()
         {

@@ -2,6 +2,7 @@ using System;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Windows.Data;
+using EventsApp.Models;
 using EventsApp.Services;
 
 namespace EventsApp.ViewModel
@@ -53,6 +54,17 @@ namespace EventsApp.ViewModel
         private bool Contains(string value) =>
             value != null &&
             value.IndexOf(_filterText, StringComparison.OrdinalIgnoreCase) >= 0;
+
+        public void AddRow(EventType et, string iconPath)
+        {
+            EventTypes.Add(new EventTypeRowItem
+            {
+                IconPath    = iconPath,
+                Code        = et.Id,
+                Name        = et.Name,
+                Description = et.Description
+            });
+        }
 
         private void Load()
         {

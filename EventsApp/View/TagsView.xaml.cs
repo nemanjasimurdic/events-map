@@ -23,6 +23,14 @@ namespace EventsApp.Pages
             FilterBox.Text = "";
         }
 
+        private void AddTag_Click(object sender, RoutedEventArgs e)
+        {
+            var vm  = (TagsViewModel)DataContext;
+            var dlg = new AddTagWindow(vm);
+            dlg.Owner = Window.GetWindow(this);
+            dlg.ShowDialog();
+        }
+
         private void InfoButton_Click(object sender, RoutedEventArgs e)
         {
             var btn     = (Button)sender;

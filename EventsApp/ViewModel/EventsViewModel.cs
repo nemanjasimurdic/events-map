@@ -63,6 +63,21 @@ namespace EventsApp.ViewModel
             value != null &&
             value.IndexOf(_filterText, StringComparison.OrdinalIgnoreCase) >= 0;
 
+        public void AddRow(Event ev, string typeName, string iconPath)
+        {
+            Events.Add(new EventRowItem
+            {
+                IconPath    = iconPath,
+                EventId     = ev.Id,
+                Name        = ev.Name,
+                TypeName    = typeName,
+                Location    = $"{ev.City}, {ev.Country}",
+                Country     = ev.Country,
+                City        = ev.City,
+                Description = ev.Description
+            });
+        }
+
         private void Load()
         {
             var svc     = new EventService();

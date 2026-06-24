@@ -12,7 +12,9 @@ namespace EventsApp.ViewModel
                 { "#2196F3", "Blue"   },
                 { "#FF9800", "Amber"  },
                 { "#F44336", "Red"    },
-                { "#9C27B0", "Purple" }
+                { "#9C27B0", "Purple" },
+                { "#009688", "Teal"   },
+                { "#3F51B5", "Indigo" }
             };
 
         public int    Code         { get; }

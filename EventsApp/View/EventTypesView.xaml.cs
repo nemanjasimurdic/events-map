@@ -23,6 +23,14 @@ namespace EventsApp.Pages
             FilterBox.Text = "";
         }
 
+        private void AddEventType_Click(object sender, RoutedEventArgs e)
+        {
+            var vm  = (EventTypesViewModel)DataContext;
+            var dlg = new AddEventTypeWindow(vm);
+            dlg.Owner = Window.GetWindow(this);
+            dlg.ShowDialog();
+        }
+
         private void InfoButton_Click(object sender, RoutedEventArgs e)
         {
             var btn     = (Button)sender;
