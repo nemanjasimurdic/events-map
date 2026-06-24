@@ -23,6 +23,14 @@ namespace EventsApp.Pages
             FilterBox.Text = "";
         }
 
+        private void SearchButton_Click(object sender, RoutedEventArgs e)
+        {
+            var vm  = (TagsViewModel)DataContext;
+            var dlg = new SearchTagWindow(vm, vm.SearchState, () => { FilterBox.Text = ""; });
+            dlg.Owner = Window.GetWindow(this);
+            dlg.ShowDialog();
+        }
+
         private void AddTag_Click(object sender, RoutedEventArgs e)
         {
             var vm  = (TagsViewModel)DataContext;

@@ -41,22 +41,43 @@ namespace EventsApp.ViewModel
 
         public event PropertyChangedEventHandler PropertyChanged;
 
+        public SearchEventViewModel SearchState { get; }
+
         public EventsViewModel()
         {
             Load();
+            SearchState = new SearchEventViewModel(new EventService().LoadEventTypes());
             _view = CollectionViewSource.GetDefaultView(Events);
             _view.Filter = FilterPredicate;
         }
 
+        private Func<EventRowItem, bool> _searchPredicate;
+
         private bool FilterPredicate(object obj)
         {
-            if (string.IsNullOrEmpty(_filterText)) return true;
             var item = (EventRowItem)obj;
-            return Contains(item.Name)        ||
-                   Contains(item.TypeName)    ||
-                   Contains(item.Country)     ||
-                   Contains(item.City)        ||
-                   Contains(item.Description);
+            if (!string.IsNullOrEmpty(_filterText))
+            {
+                if (!Contains(item.Name)        &&
+                    !Contains(item.TypeName)    &&
+                    !Contains(item.Country)     &&
+                    !Contains(item.City)        &&
+                    !Contains(item.Description))
+                    return false;
+            }
+            return _searchPredicate == null || _searchPredicate(item);
+        }
+
+        public void ApplySearch(Func<EventRowItem, bool> predicate)
+        {
+            _searchPredicate = predicate;
+            _view.Refresh();
+        }
+
+        public void ClearSearch()
+        {
+            _searchPredicate = null;
+            _view.Refresh();
         }
 
         private bool Contains(string value) =>

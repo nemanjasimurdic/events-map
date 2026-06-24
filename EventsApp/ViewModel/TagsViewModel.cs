@@ -49,6 +49,8 @@ namespace EventsApp.ViewModel
 
         public event PropertyChangedEventHandler PropertyChanged;
 
+        public SearchTagViewModel SearchState { get; } = new SearchTagViewModel();
+
         public TagsViewModel()
         {
             Load();
@@ -56,11 +58,29 @@ namespace EventsApp.ViewModel
             _view.Filter = FilterPredicate;
         }
 
+        private Func<TagRowItem, bool> _searchPredicate;
+
         private bool FilterPredicate(object obj)
         {
-            if (string.IsNullOrEmpty(_filterText)) return true;
             var item = (TagRowItem)obj;
-            return Contains(item.Description);
+            if (!string.IsNullOrEmpty(_filterText))
+            {
+                if (!Contains(item.Description))
+                    return false;
+            }
+            return _searchPredicate == null || _searchPredicate(item);
+        }
+
+        public void ApplySearch(Func<TagRowItem, bool> predicate)
+        {
+            _searchPredicate = predicate;
+            _view.Refresh();
+        }
+
+        public void ClearSearch()
+        {
+            _searchPredicate = null;
+            _view.Refresh();
         }
 
         private bool Contains(string value) =>

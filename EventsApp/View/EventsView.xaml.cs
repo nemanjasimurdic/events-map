@@ -23,6 +23,14 @@ namespace EventsApp.Pages
             FilterBox.Text = "";
         }
 
+        private void SearchButton_Click(object sender, RoutedEventArgs e)
+        {
+            var vm  = (EventsViewModel)DataContext;
+            var dlg = new SearchEventWindow(vm, vm.SearchState, () => { FilterBox.Text = ""; });
+            dlg.Owner = Window.GetWindow(this);
+            dlg.ShowDialog();
+        }
+
         private void AddEvent_Click(object sender, RoutedEventArgs e)
         {
             var vm  = (EventsViewModel)DataContext;

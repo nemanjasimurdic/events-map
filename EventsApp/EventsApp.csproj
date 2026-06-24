@@ -60,6 +60,30 @@
     <Compile Include="Model\Event.cs" />
     <Compile Include="Model\EventType.cs" />
     <Compile Include="Model\Tag.cs" />
+    <Page Include="View\SearchEventTypeWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Compile Include="View\SearchEventTypeWindow.xaml.cs">
+      <DependentUpon>SearchEventTypeWindow.xaml</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
+    <Page Include="View\SearchTagWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Compile Include="View\SearchTagWindow.xaml.cs">
+      <DependentUpon>SearchTagWindow.xaml</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
+    <Page Include="View\SearchEventWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Compile Include="View\SearchEventWindow.xaml.cs">
+      <DependentUpon>SearchEventWindow.xaml</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
     <Page Include="View\EditEventWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -178,6 +202,9 @@
     <Compile Include="ViewModel\EditEventViewModel.cs" />
     <Compile Include="ViewModel\EditEventTypeViewModel.cs" />
     <Compile Include="ViewModel\EditTagViewModel.cs" />
+    <Compile Include="ViewModel\SearchEventViewModel.cs" />
+    <Compile Include="ViewModel\SearchEventTypeViewModel.cs" />
+    <Compile Include="ViewModel\SearchTagViewModel.cs" />
     <Compile Include="ViewModel\AddEventViewModel.cs" />
     <Compile Include="ViewModel\AddEventTypeViewModel.cs" />
     <Compile Include="ViewModel\AddTagViewModel.cs" />
