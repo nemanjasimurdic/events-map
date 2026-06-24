@@ -66,6 +66,24 @@ namespace EventsApp.ViewModel
             });
         }
 
+        public void UpdateRow(int originalId, EventType et, string iconPath)
+        {
+            for (int i = 0; i < EventTypes.Count; i++)
+            {
+                if (EventTypes[i].Code == originalId)
+                {
+                    EventTypes[i] = new EventTypeRowItem
+                    {
+                        IconPath    = iconPath,
+                        Code        = et.Id,
+                        Name        = et.Name,
+                        Description = et.Description
+                    };
+                    return;
+                }
+            }
+        }
+
         private void Load()
         {
             var svc = new EventService();

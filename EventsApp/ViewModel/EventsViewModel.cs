@@ -78,6 +78,28 @@ namespace EventsApp.ViewModel
             });
         }
 
+        public void UpdateRow(int originalId, Event ev, string typeName, string iconPath)
+        {
+            for (int i = 0; i < Events.Count; i++)
+            {
+                if (Events[i].EventId == originalId)
+                {
+                    Events[i] = new EventRowItem
+                    {
+                        IconPath    = iconPath,
+                        EventId     = ev.Id,
+                        Name        = ev.Name,
+                        TypeName    = typeName,
+                        Location    = $"{ev.City}, {ev.Country}",
+                        Country     = ev.Country,
+                        City        = ev.City,
+                        Description = ev.Description
+                    };
+                    return;
+                }
+            }
+        }
+
         private void Load()
         {
             var svc     = new EventService();

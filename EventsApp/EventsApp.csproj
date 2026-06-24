@@ -60,6 +60,30 @@
     <Compile Include="Model\Event.cs" />
     <Compile Include="Model\EventType.cs" />
     <Compile Include="Model\Tag.cs" />
+    <Page Include="View\EditEventWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Compile Include="View\EditEventWindow.xaml.cs">
+      <DependentUpon>EditEventWindow.xaml</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
+    <Page Include="View\EditEventTypeWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Compile Include="View\EditEventTypeWindow.xaml.cs">
+      <DependentUpon>EditEventTypeWindow.xaml</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
+    <Page Include="View\EditTagWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Compile Include="View\EditTagWindow.xaml.cs">
+      <DependentUpon>EditTagWindow.xaml</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
     <Page Include="View\AddEventTypeWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -151,6 +175,9 @@
     <Compile Include="Converters\PercentageToPieSliceConverter.cs" />
     <Compile Include="Services\EventService.cs" />
     <Compile Include="VML\ViewModelLocator.cs" />
+    <Compile Include="ViewModel\EditEventViewModel.cs" />
+    <Compile Include="ViewModel\EditEventTypeViewModel.cs" />
+    <Compile Include="ViewModel\EditTagViewModel.cs" />
     <Compile Include="ViewModel\AddEventViewModel.cs" />
     <Compile Include="ViewModel\AddEventTypeViewModel.cs" />
     <Compile Include="ViewModel\AddTagViewModel.cs" />

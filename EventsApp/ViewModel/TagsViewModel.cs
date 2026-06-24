@@ -79,6 +79,25 @@ namespace EventsApp.ViewModel
             });
         }
 
+        public void UpdateRow(int originalId, Tag tag)
+        {
+            string name = ColorNames.TryGetValue(tag.ColorHex, out var n) ? n : tag.ColorHex;
+            for (int i = 0; i < Tags.Count; i++)
+            {
+                if (Tags[i].Code == originalId)
+                {
+                    Tags[i] = new TagRowItem
+                    {
+                        Code         = tag.Id,
+                        Description  = tag.Description,
+                        ColorHex     = tag.ColorHex,
+                        ColorDisplay = $"{name} ({tag.ColorHex})"
+                    };
+                    return;
+                }
+            }
+        }
+
         private void Load()
         {
             var svc = new EventService();

@@ -31,6 +31,17 @@ namespace EventsApp.Pages
             dlg.ShowDialog();
         }
 
+        private void EditButton_Click(object sender, RoutedEventArgs e)
+        {
+            var btn     = (Button)sender;
+            var rowItem = (EventRowItem)btn.DataContext;
+
+            var vm  = (EventsViewModel)DataContext;
+            var dlg = new EditEventWindow(vm, rowItem.EventId);
+            dlg.Owner = Window.GetWindow(this);
+            dlg.ShowDialog();
+        }
+
         private void InfoButton_Click(object sender, RoutedEventArgs e)
         {
             var btn     = (Button)sender;
